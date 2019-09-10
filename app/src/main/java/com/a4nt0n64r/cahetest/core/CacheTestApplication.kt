@@ -8,11 +8,11 @@ import com.a4nt0n64r.cahetest.di.module.AppModule
 
 class CacheTestApplication : Application() {
 
-    lateinit var someComponent: CoreComponent
+    lateinit var coreComponent: CoreComponent
 
     override fun onCreate() {
         super.onCreate()
-        someComponent = initDagger(this)
+        coreComponent = initDagger(this)
     }
 
     private fun initDagger(app: CacheTestApplication): CoreComponent =

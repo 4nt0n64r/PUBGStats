@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
 
-class MainPresenterImpl() : Presenter {
+class MainPresenterImpl : Presenter {
 
     private var job: Job? = null
 

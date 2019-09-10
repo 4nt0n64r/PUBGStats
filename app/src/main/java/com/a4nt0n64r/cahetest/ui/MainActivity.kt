@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        (application as CacheTestApplication).someComponent.inject(this)
+        (application as CacheTestApplication).coreComponent.inject(this)
 
         presenter.setView(this)
 

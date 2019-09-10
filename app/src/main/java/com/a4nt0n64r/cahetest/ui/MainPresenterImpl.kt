@@ -10,16 +10,13 @@ import com.a4nt0n64r.cahetest.ui.base.Presenter
 import com.a4nt0n64r.cahetest.ui.base.View
 import kotlinx.coroutines.*
 import java.util.*
-
-//Обрати внимание на аргументы конструктора - мы передаем экземпляр View,
-// а Repository просто создаём конструктором.
-//Компоненты MVP приложения
+import javax.inject.Inject
 
 class MainPresenterImpl() : Presenter {
 
     private var job: Job? = null
 
-    private val repository:Repository = MainRepoImpl()
+    @Inject lateinit var repository:Repository
 
     private lateinit var mainView: View
 
@@ -89,10 +86,6 @@ class MainPresenterImpl() : Presenter {
 
 
     override fun onDestroy() {
-        /**
-         * Если бы мы работали например с RxJava, в этом классе стоило бы отписываться от подписок
-         * Кроме того, при работе с другими методами асинхронного андроида,здесь мы боремся с утечкой контекста
-         */
         job!!.cancel()
     }
 

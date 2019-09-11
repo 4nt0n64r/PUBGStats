@@ -1,25 +1,18 @@
 package com.a4nt0n64r.cahetest.ui
 
-import android.provider.Contacts
 import android.util.Log
-import com.a4nt0n64r.cahetest.data.repository.MainRepoImpl
-import com.a4nt0n64r.cahetest.data.source.db.PlayerDao
 import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.ui.base.Presenter
 import com.a4nt0n64r.cahetest.ui.base.View
 import kotlinx.coroutines.*
-import java.util.*
 import javax.inject.Inject
 
-class MainPresenterImpl : Presenter {
+class PresenterImpl @Inject constructor(val repository: Repository) : Presenter {
 
     private var job: Job? = null
 
-    @Inject lateinit var repository:Repository
-
     private lateinit var mainView: View
-
 
     override fun onDeleteButtonWasClicked(name: String) {
         job == CoroutineScope(Dispatchers.Main).launch {
@@ -30,14 +23,14 @@ class MainPresenterImpl : Presenter {
         }
     }
 
-    override fun onSaveButtonWasClicked(name:String,data:String) {
+    override fun onSaveButtonWasClicked(name: String, data: String) {
         job == CoroutineScope(Dispatchers.Main).launch {
-            if (name != "" && data != ""){
-                repository.savePlayer(Player(name,data))
+            if (name != "" && data != "") {
+                repository.savePlayer(Player(name, data))
                 withContext(Dispatchers.IO) {
                     mainView.showSnackbar("save ${name}, ${data}")
                 }
-            }else{
+            } else {
                 mainView.showSnackbar("Enter name and data please!")
             }
 
@@ -45,7 +38,7 @@ class MainPresenterImpl : Presenter {
     }
 
     override fun onFindButtonWasClicked(name: String) {
-        if (name != ""){
+        if (name != "") {
             val player = CoroutineScope(Dispatchers.Main).async {
                 repository.findPlayer(name)
             }
@@ -56,7 +49,7 @@ class MainPresenterImpl : Presenter {
                     mainView.fillData(player.await().data)
                 }
             }
-        }else{
+        } else {
             mainView.showSnackbar("Empty find request!")
         }
 
@@ -67,11 +60,11 @@ class MainPresenterImpl : Presenter {
             val players = repository.getAllPlayers()
             withContext(Dispatchers.IO) {
                 mainView.showSnackbar("show all")
-                var names:String = ""
-                var data:String = ""
-                for (pl in players){
-                    names = names +pl.name
-                    data = data +pl.data
+                var names: String = ""
+                var data: String = ""
+                for (pl in players) {
+                    names = names + pl.name
+                    data = data + pl.data
                 }
                 mainView.fillName(names)
                 mainView.fillData(data)
@@ -84,13 +77,12 @@ class MainPresenterImpl : Presenter {
         this.mainView = view
     }
 
-
     override fun onDestroy() {
         job!!.cancel()
     }
 
     companion object {
-        val TAG = "MainPresenterImpl"
+        val TAG = "PresenterImpl"
     }
 }
 

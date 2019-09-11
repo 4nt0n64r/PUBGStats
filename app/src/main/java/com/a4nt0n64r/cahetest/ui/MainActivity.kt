@@ -8,6 +8,7 @@ import com.a4nt0n64r.cahetest.ui.base.Presenter
 import com.a4nt0n64r.cahetest.R
 import com.a4nt0n64r.cahetest.ui.base.View
 import com.a4nt0n64r.cahetest.core.CacheTestApplication
+import com.a4nt0n64r.cahetest.domain.repository.Repository
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 

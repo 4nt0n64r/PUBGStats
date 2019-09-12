@@ -7,20 +7,20 @@ import android.content.Context
 import com.a4nt0n64r.cahetest.domain.model.Player
 
 @Database(entities = [Player::class],
-    version = MyDataBase.VERSION,
+    version = MyDatabase.VERSION,
     exportSchema = false
 )
-abstract class MyDataBase : RoomDatabase() {
+abstract class MyDatabase : RoomDatabase() {
 
     companion object {
         const val DB_NAME = "players.db"
         const val VERSION = 1
     }
 
-    abstract fun playerDAO(): PlayerDao
+    abstract fun playerDao(): PlayerDao
 
     fun createDatabase(context: Context) {
-        Room.databaseBuilder(context.applicationContext, MyDataBase::class.java, MyDataBase.DB_NAME)
+        Room.databaseBuilder(context.applicationContext, MyDatabase::class.java, MyDatabase.DB_NAME)
             .build()
     }
 }

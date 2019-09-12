@@ -1,6 +1,7 @@
 package com.a4nt0n64r.cahetest.ui
 
 import android.util.Log
+import com.a4nt0n64r.cahetest.core.CacheTestApplication
 import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.ui.base.Presenter
@@ -8,7 +9,9 @@ import com.a4nt0n64r.cahetest.ui.base.View
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class PresenterImpl @Inject constructor(val repository: Repository) : Presenter {
+class PresenterImpl : Presenter {
+
+    @Inject lateinit var repository: Repository
 
     private var job: Job? = null
 
@@ -63,8 +66,8 @@ class PresenterImpl @Inject constructor(val repository: Repository) : Presenter 
                 var names: String = ""
                 var data: String = ""
                 for (pl in players) {
-                    names = names + pl.name
-                    data = data + pl.data
+                    names += pl.name
+                    data += pl.data
                 }
                 mainView.fillName(names)
                 mainView.fillData(data)
@@ -78,14 +81,12 @@ class PresenterImpl @Inject constructor(val repository: Repository) : Presenter 
     }
 
     override fun onDestroy() {
-        job!!.cancel()
+        if (job != null) {
+            job!!.cancel()
+        }
     }
 
     companion object {
         val TAG = "PresenterImpl"
     }
-}
-
-fun log(msg: String) {
-    Log.d("TAG", msg)
 }

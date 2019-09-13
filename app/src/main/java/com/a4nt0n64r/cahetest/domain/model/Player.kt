@@ -7,8 +7,9 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = "players")
 data class Player(
     @ColumnInfo(name = "name_field") val name: String,
-    @ColumnInfo(name = "data_field") val data: String,
-    @PrimaryKey(autoGenerate = true) val id: Int = 0
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "data_field") val data: String
+
 )
 
 

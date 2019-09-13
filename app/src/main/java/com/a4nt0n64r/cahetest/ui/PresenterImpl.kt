@@ -1,78 +1,92 @@
 package com.a4nt0n64r.cahetest.ui
 
-import android.util.Log
-import com.a4nt0n64r.cahetest.core.CacheTestApplication
 import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.ui.base.Presenter
 import com.a4nt0n64r.cahetest.ui.base.View
 import kotlinx.coroutines.*
-import javax.inject.Inject
 
-class PresenterImpl : Presenter {
-
-    @Inject lateinit var repository: Repository
+class PresenterImpl(private val repository: Repository) : Presenter {
 
     private var job: Job? = null
 
     private lateinit var mainView: View
 
     override fun onDeleteButtonWasClicked(name: String) {
-        job == CoroutineScope(Dispatchers.Main).launch {
-            repository.deletePlayer(name)
-            withContext(Dispatchers.IO) {
-                mainView.showSnackbar("deleted $name")
+        if (name != "") {
+            job == CoroutineScope(Dispatchers.IO).launch {
+                val player = repository.findPlayer(name)
+                if (player != null){
+                    repository.deletePlayer(name)
+                    withContext(Dispatchers.Main) {
+                        mainView.showSnackbar("deleted $name")
+                    }
+                }
+                else{
+                    withContext(Dispatchers.Main){mainView.showSnackbar("There's no players with name $name")}
+                }
+            }
+        } else {
+            job == CoroutineScope(Dispatchers.Main).launch {
+                mainView.showSnackbar("Empty delete request!")
             }
         }
     }
 
     override fun onSaveButtonWasClicked(name: String, data: String) {
-        job == CoroutineScope(Dispatchers.Main).launch {
+        job == CoroutineScope(Dispatchers.IO).launch {
             if (name != "" && data != "") {
                 repository.savePlayer(Player(name, data))
-                withContext(Dispatchers.IO) {
-                    mainView.showSnackbar("save ${name}, ${data}")
+                withContext(Dispatchers.Main) {
+                    mainView.showSnackbar("save ${name} ${data}")
                 }
             } else {
-                mainView.showSnackbar("Enter name and data please!")
+                job == CoroutineScope(Dispatchers.Main).launch {
+                    mainView.showSnackbar("Empty find request!")
+                }
             }
-
         }
     }
 
     override fun onFindButtonWasClicked(name: String) {
         if (name != "") {
-            val player = CoroutineScope(Dispatchers.Main).async {
+            val player = CoroutineScope(Dispatchers.IO).async {
                 repository.findPlayer(name)
             }
-            job == CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
+            job == CoroutineScope(Dispatchers.IO).launch {
+                if (player.await() != null){
                     mainView.showSnackbar("find ${player.await()}")
                     mainView.fillName(player.await().name)
                     mainView.fillData(player.await().data)
                 }
+                else{
+                    withContext(Dispatchers.Main){mainView.showSnackbar("There's no players with name $name")}
+                }
             }
         } else {
-            mainView.showSnackbar("Empty find request!")
+            job == CoroutineScope(Dispatchers.Main).launch {
+                mainView.showSnackbar("Empty find request!")
+            }
         }
-
     }
 
     override fun onShowButtonWasClicked() {
-        job == CoroutineScope(Dispatchers.Main).launch {
+        job == CoroutineScope(Dispatchers.IO).launch {
             val players = repository.getAllPlayers()
-            withContext(Dispatchers.IO) {
-                mainView.showSnackbar("show all")
+            if (players != null){
+                withContext(Dispatchers.Main) { mainView.showSnackbar("show all") }
                 var names: String = ""
                 var data: String = ""
                 for (pl in players) {
-                    names += pl.name
-                    data += pl.data
+                    names += (" " + pl.name)
+                    data += (" " + pl.data)
                 }
                 mainView.fillName(names)
                 mainView.fillData(data)
             }
-
+            else{
+                withContext(Dispatchers.Main){mainView.showSnackbar("There's no players!")}
+            }
         }
     }
 

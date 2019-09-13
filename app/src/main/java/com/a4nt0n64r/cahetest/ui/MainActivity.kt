@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity(), View {
         setContentView(R.layout.activity_main)
 
         (application as CacheTestApplication).coreComponent.inject(this)
-        (application as CacheTestApplication).coreComponent.inject(presenter)
 
         presenter.setView(this)
 

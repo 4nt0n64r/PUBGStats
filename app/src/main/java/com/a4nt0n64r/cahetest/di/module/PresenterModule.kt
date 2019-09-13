@@ -12,5 +12,5 @@ import javax.inject.Singleton
 class PresenterModule {
     @Provides
     @Singleton
-    fun providePresenter(): Presenter = PresenterImpl()
+    fun providePresenter(repository: Repository): Presenter = PresenterImpl(repository)
 }

@@ -1,14 +1,10 @@
 package com.a4nt0n64r.cahetest.data.repository
 
-import com.a4nt0n64r.cahetest.data.source.db.MyDatabase
 import com.a4nt0n64r.cahetest.data.source.db.PlayerDao
 import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.domain.repository.Repository
-import javax.inject.Inject
 
-class RepoImpl : Repository {
-
-    @Inject lateinit var dao: PlayerDao
+class RepoImpl (private val dao: PlayerDao): Repository {
 
     override suspend fun deletePlayer(name: String) {
         dao.deleteByName(name)
@@ -23,6 +19,6 @@ class RepoImpl : Repository {
     }
 
     override suspend fun savePlayer(player: Player) {
-        dao.saveUser(player)
+        dao.savePlayer(player)
     }
 }

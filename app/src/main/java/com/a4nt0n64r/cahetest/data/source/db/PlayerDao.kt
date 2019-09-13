@@ -10,15 +10,15 @@ import com.a4nt0n64r.cahetest.domain.model.Player
 interface PlayerDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveUser(user: Player)
+    fun savePlayer(player: Player)
 
     @Query("DELETE FROM players WHERE name_field = :name")
     fun deleteByName(name: String)
 
-    @Query("SELECT id,name_field,data_field FROM players")
+    @Query("SELECT name_field,data_field FROM players")
     fun selectAll(): List<Player>
 
-    @Query("SELECT id,name_field,data_field FROM players WHERE name_field = :name")
+    @Query("SELECT name_field,data_field FROM players WHERE name_field = :name")
     fun findByName(name: String): Player
 
 }

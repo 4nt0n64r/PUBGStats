@@ -13,5 +13,7 @@ interface Presenter {
     fun onShowButtonWasClicked()
     fun onSaveButtonWasClicked(name:String,data:String)
 
+    fun onNetButtonWasClicked()
+
     fun onDestroy()
 }

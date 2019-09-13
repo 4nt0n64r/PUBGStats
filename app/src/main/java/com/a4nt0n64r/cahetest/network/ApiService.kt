@@ -1,13 +1,12 @@
 package com.a4nt0n64r.cahetest.network
 
-import com.a4nt0n64r.cahetest.domain.model.Player
+import com.a4nt0n64r.cahetest.domain.model.CloudPlayer
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("player")
-    fun getPlayerFromCloud(): Call<Player>
+    @GET("player.txt")
+    fun getPlayerFromCloud(): Call<CloudPlayer>
 
 }

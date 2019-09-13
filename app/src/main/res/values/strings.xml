@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CaсheTest</string>
+    <string name="base_url">"https://raw.githubusercontent.com/4nt0n64r/CaheTest/master"</string>
 </resources>

@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity(), View {
             presenter.onShowButtonWasClicked()
         }
 
+        network.setOnClickListener {
+            presenter.onNetButtonWasClicked()
+        }
+
     }
 
     //Вызываем у Presenter метод onDestroy, чтобы избежать утечек контекста и прочих неприятностей.

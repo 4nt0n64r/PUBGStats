@@ -14,7 +14,7 @@ import okhttp3.Cache
 
 
 @Module
-class NetworkModule {
+class NetworkModule(private val baseUrl:String) {
 
     @Provides
     @Singleton
@@ -37,7 +37,7 @@ class NetworkModule {
     internal fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl(baseUrl)
+            .baseUrl("")
             .client(okHttpClient)
             .build()
     }

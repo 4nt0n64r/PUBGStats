@@ -6,7 +6,7 @@ import com.a4nt0n64r.cahetest.ui.base.Presenter
 import com.a4nt0n64r.cahetest.ui.base.View
 import kotlinx.coroutines.*
 
-class PresenterImpl(private val repository: Repository) : Presenter {
+class PresenterImpl(private val repository: Repository,private val cloudRepository:) : Presenter {
 
     private var job: Job? = null
 

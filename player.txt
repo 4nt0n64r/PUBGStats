@@ -2,5 +2,5 @@
     "player": {
         "name": "TestName",
 		    "data": "TestData"
-    }
-}
+    };
+};

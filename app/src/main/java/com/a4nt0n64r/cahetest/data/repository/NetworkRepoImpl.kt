@@ -22,10 +22,10 @@ class NetworkRepoImpl(private val apiService: ApiService) :NetworkRepository{
             }
 
             override fun onResponse(call: Call<CloudPlayer>, response: Response<CloudPlayer>) {
-
-                //TODO( вот тут мы можем получить: {"errors":[{"title":"Not Found","detail":"No Players Found Matching Criteria"}]})
-                // Это надо обработать как "ИГРОК НЕ НАЙДЕН"
                 val response = response.body()
+                if (response is CloudPlayer){
+                    Log.d("TAG","yes it is!")
+                }
                 if (response != null) callback.invoke(response)
 
             }

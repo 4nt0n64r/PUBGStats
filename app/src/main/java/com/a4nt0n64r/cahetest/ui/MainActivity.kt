@@ -2,30 +2,36 @@ package com.a4nt0n64r.cahetest.ui
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.a4nt0n64r.cahetest.ui.base.Presenter
 import com.a4nt0n64r.cahetest.R
-import com.a4nt0n64r.cahetest.ui.base.View
 import com.a4nt0n64r.cahetest.core.CacheTestApplication
-import com.a4nt0n64r.cahetest.domain.repository.Repository
+import com.a4nt0n64r.cahetest.ui.base.Presenter
+import com.a4nt0n64r.cahetest.ui.base.View
+import com.arellomobile.mvp.MvpAppCompatActivity
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), View {
+class MainActivity : MvpAppCompatActivity(), View {
 
     private val TAG = "MainActivity"
 
-    @Inject lateinit var presenter: Presenter
+    @Inject
+    @InjectPresenter
+    lateinit var presenter: Presenter
+
+    @ProvidePresenter
+    fun providePresenter(): Presenter {
+        return presenter
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         (application as CacheTestApplication).coreComponent.inject(this)
-
-        presenter.setView(this)
 
         save.setOnClickListener {
             presenter.onSaveButtonWasClicked(name_tv.text.toString(),data_tv.text.toString())

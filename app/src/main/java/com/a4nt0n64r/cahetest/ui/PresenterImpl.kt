@@ -5,17 +5,18 @@ import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.network.NetworkRepository
 import com.a4nt0n64r.cahetest.ui.base.Presenter
 import com.a4nt0n64r.cahetest.ui.base.View
+import com.arellomobile.mvp.InjectViewState
+import com.arellomobile.mvp.MvpPresenter
 import kotlinx.coroutines.*
 
+@InjectViewState
 class PresenterImpl(
     private val repository: Repository,
     private val cloudRepository: NetworkRepository
-) : Presenter {
+) : MvpPresenter<View>(),Presenter {
 
 
     private var job: Job? = null
-
-    private lateinit var mainView: View
 
     override fun onDeleteButtonWasClicked(name: String) {
         if (name != "") {
@@ -24,15 +25,15 @@ class PresenterImpl(
                 if (player != null) {
                     repository.deletePlayer(name)
                     withContext(Dispatchers.Main) {
-                        mainView.showSnackbar("deleted $name")
+                        viewState.showSnackbar("deleted $name")
                     }
                 } else {
-                    withContext(Dispatchers.Main) { mainView.showSnackbar("There's no players with name $name") }
+                    withContext(Dispatchers.Main) { viewState.showSnackbar("There's no players with name $name") }
                 }
             }
         } else {
             job == CoroutineScope(Dispatchers.Main).launch {
-                mainView.showSnackbar("Empty delete request!")
+                viewState.showSnackbar("Empty delete request!")
             }
         }
     }
@@ -42,11 +43,11 @@ class PresenterImpl(
             if (name != "" && data != "") {
                 repository.savePlayer(Player(name, data))
                 withContext(Dispatchers.Main) {
-                    mainView.showSnackbar("save ${name} ${data}")
+                    viewState.showSnackbar("save ${name} ${data}")
                 }
             } else {
                 job == CoroutineScope(Dispatchers.Main).launch {
-                    mainView.showSnackbar("Empty find request!")
+                    viewState.showSnackbar("Empty find request!")
                 }
             }
         }
@@ -59,16 +60,16 @@ class PresenterImpl(
             }
             job == CoroutineScope(Dispatchers.IO).launch {
                 if (player.await() != null) {
-                    mainView.showSnackbar("find ${player.await()}")
-                    mainView.fillName(player.await().name)
-                    mainView.fillData(player.await().data)
+                    viewState.showSnackbar("find ${player.await()}")
+                    viewState.fillName(player.await().name)
+                    viewState.fillData(player.await().data)
                 } else {
-                    withContext(Dispatchers.Main) { mainView.showSnackbar("There's no players with name $name") }
+                    withContext(Dispatchers.Main) { viewState.showSnackbar("There's no players with name $name") }
                 }
             }
         } else {
             job == CoroutineScope(Dispatchers.Main).launch {
-                mainView.showSnackbar("Empty find request!")
+                viewState.showSnackbar("Empty find request!")
             }
         }
     }
@@ -77,17 +78,17 @@ class PresenterImpl(
         job == CoroutineScope(Dispatchers.IO).launch {
             val players = repository.getAllPlayers()
             if (players != null) {
-                withContext(Dispatchers.Main) { mainView.showSnackbar("show all") }
+                withContext(Dispatchers.Main) { viewState.showSnackbar("show all") }
                 var names: String = ""
                 var data: String = ""
                 for (pl in players) {
                     names += (" " + pl.name)
                     data += (" " + pl.data)
                 }
-                mainView.fillName(names)
-                mainView.fillData(data)
+                viewState.fillName(names)
+                viewState.fillData(data)
             } else {
-                withContext(Dispatchers.Main) { mainView.showSnackbar("There's no players!") }
+                withContext(Dispatchers.Main) { viewState.showSnackbar("There's no players!") }
             }
         }
     }
@@ -101,14 +102,10 @@ class PresenterImpl(
             cloudRepository.getPlayer { responce ->
                 name = responce.player.name
                 data = responce.player.data
+                val cloudPlayer = Player(name, data)
+                CoroutineScope(Dispatchers.Main).launch{viewState.showSnackbar(cloudPlayer.toString())}
             }
-            val cloudPlayer = Player(name, data)
-            withContext(Dispatchers.Main) { mainView.showSnackbar(cloudPlayer.toString()) }
         }
-    }
-
-    override fun setView(view: View) {
-        this.mainView = view
     }
 
     override fun onDestroy() {

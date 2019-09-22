@@ -22,12 +22,8 @@ class NetworkRepoImpl(private val apiService: ApiService) :NetworkRepository{
             }
 
             override fun onResponse(call: Call<CloudPlayer>, response: Response<CloudPlayer>) {
-                val response = response.body()
-                if (response is CloudPlayer){
-                    Log.d("TAG","yes it is!")
-                }
-                if (response != null) callback.invoke(response)
-
+                val resp = response.body()
+                if (resp != null) callback.invoke(resp)
             }
         })
     }

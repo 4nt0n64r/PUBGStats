@@ -3,17 +3,19 @@ package com.a4nt0n64r.cahetest.ui
 import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.network.NetworkRepository
+import com.a4nt0n64r.cahetest.ui.base.AbstractPresenter
 import com.a4nt0n64r.cahetest.ui.base.Presenter
 import com.a4nt0n64r.cahetest.ui.base.View
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import kotlinx.coroutines.*
+import java.util.prefs.AbstractPreferences
 
 @InjectViewState
 class PresenterImpl(
     private val repository: Repository,
     private val cloudRepository: NetworkRepository
-) : MvpPresenter<View>(),Presenter {
+) : AbstractPresenter() {
 
 
     private var job: Job? = null

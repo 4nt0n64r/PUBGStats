@@ -18,7 +18,6 @@ class NetworkRepoImpl(private val apiService: ApiService) :NetworkRepository{
 
             override fun onFailure(call: Call<CloudPlayer>, t: Throwable) {
                 Log.d("FAIL", "FAIL что-то не так!")
-
             }
 
             override fun onResponse(call: Call<CloudPlayer>, response: Response<CloudPlayer>) {

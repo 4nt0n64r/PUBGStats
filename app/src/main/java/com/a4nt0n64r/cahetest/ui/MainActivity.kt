@@ -4,34 +4,30 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.util.Log
 import com.a4nt0n64r.cahetest.R
-import com.a4nt0n64r.cahetest.core.CacheTestApplication
+import com.a4nt0n64r.cahetest.ui.base.AbstractPresenter
 import com.a4nt0n64r.cahetest.ui.base.Presenter
 import com.a4nt0n64r.cahetest.ui.base.View
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
+import org.koin.android.ext.android.get
 
 
 class MainActivity : MvpAppCompatActivity(), View {
 
     private val TAG = "MainActivity"
 
-    @Inject
     @InjectPresenter
-    lateinit var presenter: Presenter
+    lateinit var  presenter: AbstractPresenter
 
     @ProvidePresenter
-    fun providePresenter(): Presenter {
-        return presenter
-    }
+    fun provide(): AbstractPresenter = get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        (application as CacheTestApplication).coreComponent.inject(this)
 
         save.setOnClickListener {
             presenter.onSaveButtonWasClicked(name_tv.text.toString(),data_tv.text.toString())

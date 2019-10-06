@@ -17,3 +17,5 @@ interface Presenter{
 
     fun onDestroy()
 }
+
+abstract class AbstractPresenter:MvpPresenter<View>(),Presenter

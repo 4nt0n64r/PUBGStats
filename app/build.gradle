@@ -46,14 +46,13 @@ dependencies {
 
     implementation 'com.android.support:design:28.0.0'
 
-    //dagger
-    implementation 'com.google.dagger:dagger:2.13'
-    kapt 'com.google.dagger:dagger-compiler:2.13'
+    //koin
+    implementation "org.koin:koin-android:$koin_version"
 
     //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$gson_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okkhttp_version"
 
     //moxy
     implementation 'com.arello-mobile:moxy:1.5.5'

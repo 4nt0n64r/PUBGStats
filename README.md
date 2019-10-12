@@ -10,4 +10,4 @@ For async requests i use coroutines. \n
 "Delete" - deketess name and data by name in DB (Room)\n
 "Network" - displays data from test.txt in snackbar (Retrofit)\n
 
-<img src="https://github.com/4nt0n64r/4nt0n64r/CaheTest/blob/master/Screenshot.jpg" width="200" height="350" />
+<img src="https://github.com/4nt0n64r/CaheTest/blob/master/Screenshot.jpg" width="200" height="350" />

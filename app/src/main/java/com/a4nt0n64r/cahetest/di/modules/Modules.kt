@@ -9,8 +9,10 @@ import com.a4nt0n64r.cahetest.data.source.db.PlayerDao
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.network.ApiService
 import com.a4nt0n64r.cahetest.network.NetworkRepository
-import com.a4nt0n64r.cahetest.ui.PresenterImpl
-import com.a4nt0n64r.cahetest.ui.base.AbstractPresenter
+import com.a4nt0n64r.cahetest.ui.ActivityPresenterImpl
+import com.a4nt0n64r.cahetest.ui.base.AbstractActivityPresenter
+import com.a4nt0n64r.cahetest.ui.base.AbstractFragmentPresenter
+import com.a4nt0n64r.cahetest.ui.fragments.FragmentPresenterImpl
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -33,9 +35,13 @@ const val API_SERVICE = "api_service"
 
 val applicationModules = module(override = true) {
 
-//    presenter
-    factory<AbstractPresenter> {
-        PresenterImpl(
+//    presenters
+    factory<AbstractActivityPresenter> {
+        ActivityPresenterImpl()
+    }
+
+    factory<AbstractFragmentPresenter> {
+        FragmentPresenterImpl(
             get(REPOSITORY),
             get(CLOUD_REPOSITORY)
         )

@@ -1,29 +1,24 @@
-package com.a4nt0n64r.cahetest.ui
+package com.a4nt0n64r.cahetest.ui.fragments
 
 import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.network.NetworkRepository
-import com.a4nt0n64r.cahetest.ui.base.AbstractPresenter
-import com.a4nt0n64r.cahetest.ui.base.Presenter
-import com.a4nt0n64r.cahetest.ui.base.View
+import com.a4nt0n64r.cahetest.ui.base.AbstractFragmentPresenter
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import kotlinx.coroutines.*
-import java.util.prefs.AbstractPreferences
 
 @InjectViewState
-class PresenterImpl(
+class FragmentPresenterImpl(
     private val repository: Repository,
     private val cloudRepository: NetworkRepository
-) : AbstractPresenter() {
-
+) : AbstractFragmentPresenter() {
 
     private var job: Job? = null
 
     override fun onDeleteButtonWasClicked(name: String) {
         if (name != "") {
-            job == CoroutineScope(Dispatchers.IO).launch {
-                val player = repository.findPlayer(name)
+            job = CoroutineScope(Dispatchers.IO).launch {
+                val player: Player? = repository.findPlayer(name)
                 if (player != null) {
                     repository.deletePlayer(name)
                     withContext(Dispatchers.Main) {
@@ -34,21 +29,21 @@ class PresenterImpl(
                 }
             }
         } else {
-            job == CoroutineScope(Dispatchers.Main).launch {
+            job = CoroutineScope(Dispatchers.Main).launch {
                 viewState.showSnackbar("Empty delete request!")
             }
         }
     }
 
     override fun onSaveButtonWasClicked(name: String, data: String) {
-        job == CoroutineScope(Dispatchers.IO).launch {
+        job = CoroutineScope(Dispatchers.IO).launch {
             if (name != "" && data != "") {
                 repository.savePlayer(Player(name, data))
                 withContext(Dispatchers.Main) {
                     viewState.showSnackbar("save ${name} ${data}")
                 }
             } else {
-                job == CoroutineScope(Dispatchers.Main).launch {
+                job = CoroutineScope(Dispatchers.Main).launch {
                     viewState.showSnackbar("Empty find request!")
                 }
             }
@@ -57,11 +52,11 @@ class PresenterImpl(
 
     override fun onFindButtonWasClicked(name: String) {
         if (name != "") {
-            val player = CoroutineScope(Dispatchers.IO).async {
+            val player: Deferred<Player>? = CoroutineScope(Dispatchers.IO).async {
                 repository.findPlayer(name)
             }
-            job == CoroutineScope(Dispatchers.IO).launch {
-                if (player.await() != null) {
+            job = CoroutineScope(Dispatchers.IO).launch {
+                if (player != null) {
                     viewState.showSnackbar("find ${player.await()}")
                     viewState.fillName(player.await().name)
                     viewState.fillData(player.await().data)
@@ -70,19 +65,19 @@ class PresenterImpl(
                 }
             }
         } else {
-            job == CoroutineScope(Dispatchers.Main).launch {
+            job = CoroutineScope(Dispatchers.Main).launch {
                 viewState.showSnackbar("Empty find request!")
             }
         }
     }
 
     override fun onShowButtonWasClicked() {
-        job == CoroutineScope(Dispatchers.IO).launch {
-            val players = repository.getAllPlayers()
-            if (players != null) {
+        job = CoroutineScope(Dispatchers.IO).launch {
+            val players: List<Player>? = repository.getAllPlayers()
+            if (!players.isNullOrEmpty()) {
                 withContext(Dispatchers.Main) { viewState.showSnackbar("show all") }
-                var names: String = ""
-                var data: String = ""
+                var names = ""
+                var data = ""
                 for (pl in players) {
                     names += (" " + pl.name)
                     data += (" " + pl.data)
@@ -96,16 +91,16 @@ class PresenterImpl(
     }
 
     override fun onNetButtonWasClicked() {
-        job == CoroutineScope(Dispatchers.IO).launch {
+        job = CoroutineScope(Dispatchers.IO).launch {
 
-            var name = ""
-            var data = ""
+            var name: String
+            var data: String
 
             cloudRepository.getPlayer { responce ->
                 name = responce.player.name
                 data = responce.player.data
                 val cloudPlayer = Player(name, data)
-                CoroutineScope(Dispatchers.Main).launch{viewState.showSnackbar(cloudPlayer.toString())}
+                CoroutineScope(Dispatchers.Main).launch { viewState.showSnackbar(cloudPlayer.toString()) }
             }
         }
     }
@@ -114,9 +109,5 @@ class PresenterImpl(
         if (job != null) {
             job!!.cancel()
         }
-    }
-
-    companion object {
-        val TAG = "PresenterImpl"
     }
 }

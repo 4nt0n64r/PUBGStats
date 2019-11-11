@@ -1,11 +1,37 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+
+        <item name = "android:windowActionBar">false</item>
+        <item name = "android:windowNoTitle">true</item>
+
+        <item name="colorPrimary">@color/color_background_main</item>
+        <item name="colorPrimaryDark">@color/color_background_main</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/color_background_main</item>
+
+        <!--<item name="dropDownListViewStyle">@color/colorPrimaryDark</item>-->
+        <!--<item name="android:colorForegroundInverse">@color/colorPrimaryDark</item>-->
+        <!--<item name="android:popupBackground">@color/colorPrimaryDark</item>-->
+        <!--<item name="android:actionModeBackground">@color/colorPrimary</item>-->
+        <!--<item name="android:colorControlNormal">@color/colorPrimary</item>-->
+        <!--<item name="android:colorBackgroundCacheHint">@color/colorPrimary</item>-->
+        <!--<item name="android:textColorHint">@color/colorPrimary</item>-->
+        <!--<item name="android:colorForeground">@color/colorPrimary</item>-->
+        <!--<item name="android:colorControlHighlight">@color/colorPrimary</item>-->
+
+
+        <!--<item name="android:floatingToolbarPopupBackgroundDrawable">@drawable/my_shape</item>-->
+        <!--<item name="android:tooltipForegroundColor">@color/colorPrimaryDark</item>-->
+        <!--<item name="android:colorSwitchThumbNormal">@color/colorPrimary</item>-->
     </style>
+
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/colorAccent</item>
+<!--        <item name="boxStrokeWidth">2dp</item>-->
+    </style>
+
 
 </resources>

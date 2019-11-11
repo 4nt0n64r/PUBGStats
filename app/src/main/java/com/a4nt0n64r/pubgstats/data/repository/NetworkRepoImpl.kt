@@ -7,6 +7,7 @@ import com.a4nt0n64r.pubgstats.network.NetworkRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 
 class NetworkRepoImpl(private val apiService: ApiService) : NetworkRepository {
@@ -31,23 +32,10 @@ class NetworkRepoImpl(private val apiService: ApiService) : NetworkRepository {
         })
     }
 
-    override fun getNetSeasons(callback: (SeasonsDataFromApi) -> Unit) {
+    @Throws(IOException::class, RuntimeException::class)
+    override suspend fun getNetSeasons(): SeasonsDataFromApi? {
         val call = apiService.getSeasons()
-
-        call.enqueue(object : Callback<SeasonsDataFromApi> {
-
-
-            override fun onFailure(call: Call<SeasonsDataFromApi>, t: Throwable) {
-                Log.d("FAIL", "FAIL что-то не так!")
-            }
-
-
-            override fun onResponse(call: Call<SeasonsDataFromApi>, response: Response<SeasonsDataFromApi>) {
-                Log.d("OK", "Сезоны получены из Интернета!")
-                val data = response.body()
-                if (data != null) callback.invoke(data)
-            }
-        })
+        return call.execute().body()
     }
 
     override fun getNetStatistics(

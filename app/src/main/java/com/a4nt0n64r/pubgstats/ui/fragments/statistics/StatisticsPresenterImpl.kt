@@ -1,6 +1,6 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.statistics
 
-
+import androidx.annotation.WorkerThread
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
 import com.a4nt0n64r.pubgstats.domain.model.SeasonsDownloadDate
@@ -17,14 +17,15 @@ class StatisticsPresenterImpl(
     private val cloudRepository: NetworkRepository
 ) : AbstractStatisticsPresenter() {
 
-    lateinit var player: PlayerDB
+    // старайся не использовать lateinit.
+    // засовывай в конструктор лучше или определяй что-то по умолчанию
+    private lateinit var seasons: List<SeasonDB>
+    private lateinit var player: PlayerDB
 
-    var previousSeasonName: String = ""
-    var currentSeasonName: String = ""
+    private var previousSeasonName: String = ""
+    private var currentSeasonName: String = ""
 
-    lateinit var seasons: List<SeasonDB>
-
-    private var job: Job? = null
+    private val job: Job by lazy { SupervisorJob() }
 
     override fun setParameters(player: PlayerDB, prevSeason: String, currentSeason: String) {
         this.player = player
@@ -33,69 +34,53 @@ class StatisticsPresenterImpl(
         viewState.showPlayerName(this.player)
     }
 
-    //TODO("Сделать функцию читабельной")
     override fun setSeasons() {
-        CoroutineScope(Dispatchers.IO).launch {
-            if (shouldDownloadNewSeasons().await()) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val seasonsFromCloud = CoroutineScope(Dispatchers.IO).async {
-                        cloudRepository.getNetSeasons { dataFromApi ->
-                            val previousSeasonApi =
-                                dataFromApi.seasons[dataFromApi.seasons.size - 2]
-                            val currentSeasonApi = dataFromApi.seasons[dataFromApi.seasons.size - 1]
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val previousSeasonDB = SeasonDB(
-                                    previousSeasonApi.id,
-                                    previousSeasonName,
-                                    false
-                                )
-                                val currentSeasonDB = SeasonDB(
-                                    currentSeasonApi.id,
-                                    currentSeasonName,
-                                    true
-                                )
-                                localRepository.addSeasonToDB(currentSeasonDB)
-                                localRepository.addSeasonToDB(previousSeasonDB)
-                            }
-                        }
-                        localRepository.addDownloadDateToDB(SeasonsDownloadDate(LocalDate.now().dayOfYear))
-                        return@async localRepository.getAllSeasonsFromDB()
-                    }
-                    seasons = seasonsFromCloud.await()
-                    job = CoroutineScope(Dispatchers.Main).launch {
-                        viewState.showSeasons(seasons)
-                    }
-                }
-            } else {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val seasonsFromDB =
-                        CoroutineScope(Dispatchers.IO).async { localRepository.getAllSeasonsFromDB() }
-                    seasons = seasonsFromDB.await()
-                    job = CoroutineScope(Dispatchers.Main).launch {
-                        viewState.showSeasons(seasons)
-                    }
-                }
-
+        CoroutineScope(Dispatchers.Main + job).launch {
+            val shouldDownloadNewSeasons = withContext(Dispatchers.IO) {
+                shouldDownloadNewSeasons()
             }
+
+            seasons = withContext(Dispatchers.IO) {
+                if (shouldDownloadNewSeasons) {
+                    getNewSeasons()
+                } else {
+                    localRepository.getAllSeasonsFromDB()
+                }
+            }
+
+            viewState.showSeasons(seasons)
         }
     }
 
+    @WorkerThread
+    private suspend fun getNewSeasons(): List<SeasonDB> {
+        val dataFromApi = cloudRepository.getNetSeasons()
+            ?: throw NullPointerException("Данные должны прийти!")
+        // тут надо try-catch замутить
 
-    override fun shouldDownloadNewSeasons(): Deferred<Boolean> =
-        CoroutineScope(Dispatchers.IO).async {
-            val lastDownload = localRepository.getDownloadDateFromDB()
-            if (lastDownload != null) {
-                if (LocalDate.now().dayOfYear == lastDownload.lastDownloadOfSeasons) {
-                    return@async false
-                } else return@async true
-            } else return@async true
-        }
+        val previousSeasonApi =
+            dataFromApi.seasons[dataFromApi.seasons.size - 2]
+        val currentSeasonApi = dataFromApi.seasons[dataFromApi.seasons.size - 1]
 
+        val previousSeasonDB =
+            SeasonDB(previousSeasonApi.id, previousSeasonName, false)
+        val currentSeasonDB =
+            SeasonDB(currentSeasonApi.id, currentSeasonName, true)
+
+        localRepository.addSeasonToDB(currentSeasonDB)
+        localRepository.addSeasonToDB(previousSeasonDB)
+
+        localRepository.addDownloadDateToDB(SeasonsDownloadDate(LocalDate.now().dayOfYear))
+        return localRepository.getAllSeasonsFromDB()
+    }
+
+    override suspend fun shouldDownloadNewSeasons(): Boolean {
+        val lastDownload = localRepository.getDownloadDateFromDB()
+        return LocalDate.now().dayOfYear != lastDownload.lastDownloadOfSeasons
+    }
 
     override fun onDestroy() {
-        if (job != null) {
-            job!!.cancel()
-        }
+        job.cancel()
     }
 }
 

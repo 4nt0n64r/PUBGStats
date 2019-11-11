@@ -38,7 +38,7 @@ interface StatisticsPresenter {
 
     fun setParameters(player: PlayerDB,prevSeason:String,currentSeason:String)
     fun setSeasons()
-    fun shouldDownloadNewSeasons():Deferred<Boolean>
+    suspend fun shouldDownloadNewSeasons(): Boolean
 
 }
 

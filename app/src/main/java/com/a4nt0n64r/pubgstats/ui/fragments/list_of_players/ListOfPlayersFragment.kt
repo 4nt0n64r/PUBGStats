@@ -10,7 +10,6 @@ import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDBUI
 import com.a4nt0n64r.pubgstats.ui.ADD_PLAYER
 import com.a4nt0n64r.pubgstats.ui.MainActivity
-import com.a4nt0n64r.pubgstats.ui.STATISTICS
 import com.a4nt0n64r.pubgstats.ui.base.AbstractListOfPlayersPresenter
 import com.a4nt0n64r.pubgstats.ui.base.ListOfPlayersFragmentView
 import kotlinx.android.synthetic.main.list_of_players_frag_layout.*
@@ -88,7 +87,7 @@ class ListOfPlayersFragment : MvpAppCompatFragment(), ListOfPlayersFragmentView,
         when (fragId) {
             ADD_PLAYER -> {
                 val activity = this@ListOfPlayersFragment.activity as MainActivity
-                activity.changeFragment(ADD_PLAYER)
+                activity.drawFragment(ADD_PLAYER)
             }
         }
     }

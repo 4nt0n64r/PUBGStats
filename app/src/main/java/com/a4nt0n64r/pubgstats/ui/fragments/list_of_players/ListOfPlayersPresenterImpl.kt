@@ -1,6 +1,5 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.list_of_players
 
-import android.util.Log
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDBUI
 import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
@@ -15,11 +14,11 @@ class ListOfPlayersPresenterImpl(
     private val localRepository: LocalRepository
 ) : AbstractListOfPlayersPresenter() {
 
+    private val job: Job by lazy { SupervisorJob() }
+
     override fun letsAddNewPlayer() {
         viewState.changeFragment(ADD_PLAYER)
     }
-
-    private var job: Job? = null
 
     lateinit var listOfPlayersUI: List<PlayerDBUI>
 
@@ -31,7 +30,7 @@ class ListOfPlayersPresenterImpl(
     }
 
     override fun requestPlayersFromDB() {
-        job = CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main + job).launch {
             val listOfPlayers = CoroutineScope(Dispatchers.IO).async {
                 localRepository.getAllPlayersFromDB()
             }
@@ -44,16 +43,16 @@ class ListOfPlayersPresenterImpl(
     }
 
     override fun onPlayerTouched(position: Int) {
-        job = CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main + job).launch {
             withContext(Dispatchers.Main) {
-                val listOfPlayersInRV = listOfPlayersUI.map { PlayerDB(it.name,it.id) }
+                val listOfPlayersInRV = listOfPlayersUI.map { PlayerDB(it.name, it.id) }
                 viewState.showPlayerStatistics(listOfPlayersInRV[position])
             }
         }
     }
 
     override fun onPlayerPressed(position: Int) {
-        job = CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             listOfPlayersUI[position].isSelected = !listOfPlayersUI[position].isSelected
             viewState.showPlayers(listOfPlayersUI)
 
@@ -71,9 +70,8 @@ class ListOfPlayersPresenterImpl(
     }
 
 
-
     override fun deleteSelectedPlayers() {
-        job = CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO + job).launch {
             for (item in listOfPlayersUI) {
                 if (item.isSelected) {
                     val playerToDel = PlayerDB(item.name, item.id)
@@ -93,8 +91,6 @@ class ListOfPlayersPresenterImpl(
     }
 
     override fun onDestroy() {
-        if (job != null) {
-            job!!.cancel()
-        }
+        job.cancel()
     }
 }

@@ -1,5 +1,6 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.statistics
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
@@ -14,11 +15,9 @@ import java.time.LocalDate
 @InjectViewState
 class StatisticsPresenterImpl(
     private val localRepository: LocalRepository,
-    private val cloudRepository: NetworkRepository
+    private val networkRepository: NetworkRepository
 ) : AbstractStatisticsPresenter() {
 
-    // старайся не использовать lateinit.
-    // засовывай в конструктор лучше или определяй что-то по умолчанию
     private lateinit var seasons: List<SeasonDB>
     private lateinit var player: PlayerDB
 
@@ -42,36 +41,39 @@ class StatisticsPresenterImpl(
 
             seasons = withContext(Dispatchers.IO) {
                 if (shouldDownloadNewSeasons) {
+                    localRepository.deleteSeasonsFromDB()
                     getNewSeasons()
                 } else {
                     localRepository.getAllSeasonsFromDB()
                 }
             }
-
             viewState.showSeasons(seasons)
         }
     }
 
     @WorkerThread
     private suspend fun getNewSeasons(): List<SeasonDB> {
-        val dataFromApi = cloudRepository.getNetSeasons()
-            ?: throw NullPointerException("Данные должны прийти!")
-        // тут надо try-catch замутить
+        try {
+            val dataFromApi = networkRepository.getNetSeasons()
+            val previousSeasonApi =
+                dataFromApi!!.seasons[dataFromApi.seasons.size - 2]
+            val currentSeasonApi = dataFromApi.seasons[dataFromApi.seasons.size - 1]
 
-        val previousSeasonApi =
-            dataFromApi.seasons[dataFromApi.seasons.size - 2]
-        val currentSeasonApi = dataFromApi.seasons[dataFromApi.seasons.size - 1]
+            val previousSeasonDB =
+                SeasonDB(previousSeasonApi.id, previousSeasonName, false)
+            val currentSeasonDB =
+                SeasonDB(currentSeasonApi.id, currentSeasonName, true)
 
-        val previousSeasonDB =
-            SeasonDB(previousSeasonApi.id, previousSeasonName, false)
-        val currentSeasonDB =
-            SeasonDB(currentSeasonApi.id, currentSeasonName, true)
+            localRepository.addSeasonToDB(currentSeasonDB)
+            localRepository.addSeasonToDB(previousSeasonDB)
 
-        localRepository.addSeasonToDB(currentSeasonDB)
-        localRepository.addSeasonToDB(previousSeasonDB)
+            localRepository.addDownloadDateToDB(SeasonsDownloadDate(LocalDate.now().dayOfYear))
 
-        localRepository.addDownloadDateToDB(SeasonsDownloadDate(LocalDate.now().dayOfYear))
-        return localRepository.getAllSeasonsFromDB()
+            return localRepository.getAllSeasonsFromDB()
+        }catch (e: NullPointerException){
+            Log.d("ERROR","No data (seasons)")
+            return emptyList()
+        }
     }
 
     override suspend fun shouldDownloadNewSeasons(): Boolean {

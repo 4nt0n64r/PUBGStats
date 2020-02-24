@@ -9,10 +9,7 @@ class ActivityPresenterImpl(
 ) : AbstractActivityPresenter() {
 
     override fun loadFragment(fragmentId:Int) {
-        viewState.changeFragment(fragmentId)
+        viewState.drawFragment(fragmentId)
     }
 
-    companion object {
-        val TAG = "ActivityPresenterImpl"
-    }
 }

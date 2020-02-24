@@ -9,6 +9,12 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
+    // эта совместимость нужна пока не пофиксят
+    // https://github.com/JakeWharton/butterknife/issues/1468
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.a4nt0n64r.cahetest"
         minSdkVersion 26
@@ -40,17 +46,16 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    //material design
+    implementation 'com.google.android.material:material:1.1.0'
 
     //room
-    implementation 'androidx.room:room-runtime:2.2.0'
-    kapt 'androidx.room:room-compiler:2.2.0'
+    implementation 'androidx.room:room-runtime:2.2.3'
+    kapt 'androidx.room:room-compiler:2.2.3'
 
     //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
-
 
     //koin
     implementation "org.koin:koin-android:$koin_version"

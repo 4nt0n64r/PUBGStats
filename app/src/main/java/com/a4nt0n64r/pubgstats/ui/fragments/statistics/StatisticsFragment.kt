@@ -45,19 +45,30 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         stat_data_rv.layoutManager = LinearLayoutManager(activity!!.applicationContext)
         stat_data_rv.adapter = rvAdapter
 
+        getParametersFromBundle()
+        setParametersInPresenter()
+        setOnNavigationItemListener()
+
+    }
+
+    private fun getParametersFromBundle() {
         val bundle = this.arguments
         if (bundle != null) {
             nameOfPlayer = bundle.getString(NAME)!!
             playerId = bundle.getString(ID)!!
         }
+    }
+
+    private fun setParametersInPresenter() {
         presenter.setParameters(
             PlayerDB(nameOfPlayer, playerId),
             getString(R.string.prev_season),
             getString(R.string.current_season)
         )
-
         presenter.setSeasons()
+    }
 
+    private fun setOnNavigationItemListener() {
         val onNavigationItemSelectedListener =
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
@@ -66,6 +77,7 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
 
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
+
 
     override fun showPlayerName(player: PlayerDB) {
         txt_playerName.text = player.name

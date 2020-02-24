@@ -1,16 +1,17 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
 
         <item name = "android:windowActionBar">false</item>
         <item name = "android:windowNoTitle">true</item>
 
-        <item name="colorPrimary">@color/color_background_main</item>
-        <item name="colorPrimaryDark">@color/color_background_main</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorBackground">@color/color_background_main</item>
+        <item name="colorPrimary">@color/color_main_background</item>
+        <item name="colorPrimaryDark">@color/color_main_background</item>
+        <item name="colorAccent">@color/color_yellow_background</item>
+        <item name="android:colorBackground">@color/color_main_background</item>
+        <item name="android:shape">@color/color_main_background</item>
 
         <!--<item name="dropDownListViewStyle">@color/colorPrimaryDark</item>-->
         <!--<item name="android:colorForegroundInverse">@color/colorPrimaryDark</item>-->
@@ -29,9 +30,16 @@
     </style>
 
     <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="boxStrokeColor">@color/colorAccent</item>
-<!--        <item name="boxStrokeWidth">2dp</item>-->
+        <item name="boxStrokeColor">@color/color_yellow_background</item>
+        <item name="boxStrokeWidth">2dp</item>
     </style>
 
+
+    <style name="TextInputLayoutTheme" parent="TextAppearance.AppCompat">
+        <item name="android:textColorHint">@color/color_yellow_background</item>
+        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/color_yellow_background</item>
+        <item name="android:textColor">@color/color_yellow_background</item>
+        <item name="colorControlActivated">@color/color_yellow_background</item>
+    </style>
 
 </resources>

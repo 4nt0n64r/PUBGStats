@@ -1,6 +1,8 @@
 package com.a4nt0n64r.pubgstats.ui
 
+import android.Manifest
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
 import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.ui.base.AbstractActivityPresenter
@@ -24,6 +26,8 @@ const val ADD_TO_BACKSTACK = "backstack"
 const val NAME = "name"
 const val ID = "id"
 
+const val REQUEST_PERMISSION_CODE = 0
+
 
 class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
 
@@ -43,53 +47,89 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
 
     }
 
-    //TODO("добавить колбэк что фрагментов не осталось и вырубить приложение")
-    //TODO("когда поворачиваем экран он откатывает фрагмент статки на меню")
-    //Метод popBackStack() удаляет транзакцию с верхушки бэкстэка, возвращает true,
+    // TODO("добавить колбэк что фрагментов не осталось и вырубить приложение")
+    // TODO("когда поворачиваем экран он откатывает фрагмент статки на меню")
+    // Метод popBackStack() удаляет транзакцию с верхушки бэкстэка, возвращает true,
     // если бэкстэк хранил хотя бы одну транзакцию.
-    override public fun changeFragment(fragmentId: Int) {
+    // TODO(пермишшены!)
+
+    override fun drawFragment(fragmentId: Int) {
         when (fragmentId) {
             ADD_PLAYER -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(
-                        R.id.frame,
-                        AddPlayerFragment(), FRAGMENT_CHANGED
-                    )
-                    .addToBackStack(ADD_TO_BACKSTACK)
-                    .commit()
+                displayAddPlayerFragment()
             }
             LIST_OF_PLAYERS -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(
-                        R.id.frame,
-                        ListOfPlayersFragment(), FRAGMENT_CHANGED
-                    )
-                    .addToBackStack(ADD_TO_BACKSTACK)
-                    .commit()
+                displayListOfPlayersFragment()
             }
-
         }
     }
 
-    override fun showStatisticsFragmet(player: PlayerDB) {
-
-        val currentFrag = StatisticsFragment()
-
-        val bundle = Bundle()
-        bundle.putString(NAME, player.name)
-        bundle.putString(ID, player.id)
-        currentFrag.arguments = bundle
-
+    private fun displayListOfPlayersFragment() {
         supportFragmentManager
             .beginTransaction()
             .replace(
                 R.id.frame,
-                currentFrag, FRAGMENT_CHANGED
+                ListOfPlayersFragment(), FRAGMENT_CHANGED
             )
             .addToBackStack(ADD_TO_BACKSTACK)
             .commit()
+    }
+
+    private fun displayAddPlayerFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.frame,
+                AddPlayerFragment(), FRAGMENT_CHANGED
+            )
+            .addToBackStack(ADD_TO_BACKSTACK)
+            .commit()
+    }
+
+    private fun displayStatisticsFragment(fragment: StatisticsFragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.frame,
+                fragment, FRAGMENT_CHANGED
+            )
+            .addToBackStack(ADD_TO_BACKSTACK)
+            .commit()
+    }
+
+    override fun showStatisticsFragmet(player: PlayerDB) {
+
+
+        //TODO("переработать чтобы код выглядел лучше")
+        val statisticsFragment = StatisticsFragment()
+
+        val bundle = Bundle()
+        bundle.putString(NAME, player.name)
+        bundle.putString(ID, player.id)
+        statisticsFragment.arguments = bundle
+
+        //Нужно передать аргументы
+        displayStatisticsFragment(statisticsFragment)
+    }
+
+
+    override fun requestInternetPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.INTERNET),
+            REQUEST_PERMISSION_CODE
+        )
+    }
+
+    override fun requestStoragePermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ),
+            REQUEST_PERMISSION_CODE
+        )
     }
 
 

@@ -11,9 +11,11 @@ import moxy.viewstate.strategy.StateStrategyType
 @StateStrategyType(SingleStateStrategy::class)
 interface ActivityView : MvpView {
 
-    fun changeFragment(fragmentId: Int)
-
+    fun drawFragment(fragmentId: Int)
     fun showStatisticsFragmet(player: PlayerDB)
+
+    fun requestStoragePermission()
+    fun requestInternetPermission()
 }
 
 @StateStrategyType(SingleStateStrategy::class)
@@ -24,11 +26,14 @@ interface AddPlayerFragmentView : MvpView {
     @StateStrategyType(SkipStrategy::class)
     fun changeFragment()
 
+    fun requestInternetPermissionFromFragment()
+
 }
 
 @StateStrategyType(SingleStateStrategy::class)
 interface ListOfPlayersFragmentView : MvpView {
 
+    @StateStrategyType(SkipStrategy::class)
     fun showMinusButton()
     fun hideMinusButton()
 

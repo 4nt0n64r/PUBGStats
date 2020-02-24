@@ -1,7 +1,6 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.add_player
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +38,9 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //test
+        requestInternetPermissionFromFragment()
+
         btn_find.setOnClickListener {
             presenter.requestPlayer(input_login.text.toString())
         }
@@ -46,15 +48,20 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
 
     override fun changeFragment() {
         val activity = this@AddPlayerFragment.activity as MainActivity
-        activity.changeFragment(LIST_OF_PLAYERS)
+        activity.drawFragment(LIST_OF_PLAYERS)
     }
 
     override fun showSnackbar(msg: String) {
         val snack = Snackbar.make(parent, msg, Snackbar.LENGTH_LONG)
         val sv = snack.view
         val tv = sv.findViewById<TextView>(R.id.snackbar_text)
-        tv.setTextColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+        tv.setTextColor(ContextCompat.getColor(context!!, R.color.color_yellow_background))
         snack.show()
+    }
+
+    override fun requestInternetPermissionFromFragment(){
+        val activity = this@AddPlayerFragment.activity as MainActivity
+        activity.requestInternetPermission()
     }
 
 }

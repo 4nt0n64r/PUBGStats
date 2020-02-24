@@ -1,8 +1,6 @@
 package com.a4nt0n64r.pubgstats.ui.base
 
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
-import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
-import kotlinx.coroutines.Deferred
 import moxy.MvpPresenter
 
 
@@ -10,7 +8,6 @@ import moxy.MvpPresenter
 interface ActivityPresenter {
 
     fun loadFragment(fragmentId: Int)
-
     fun onDestroy()
 }
 
@@ -18,9 +15,7 @@ interface ActivityPresenter {
 interface AddPlayerPresenter {
 
     fun requestPlayer(name: String?)
-
     fun onDestroy()
-
 }
 
 interface ListOfPlayersPresenter {
@@ -36,7 +31,7 @@ interface ListOfPlayersPresenter {
 
 interface StatisticsPresenter {
 
-    fun setParameters(player: PlayerDB,prevSeason:String,currentSeason:String)
+    fun setParameters(player: PlayerDB, prevSeason: String, currentSeason: String)
     fun setSeasons()
     suspend fun shouldDownloadNewSeasons(): Boolean
 

@@ -2,7 +2,6 @@ package com.a4nt0n64r.pubgstats.domain.model
 
 import com.google.gson.annotations.SerializedName
 
-// парсим ответ от АПИ ------
 data class PlayerDataFromApi(
     @SerializedName("data")
     //хоть тут и лист, но заказываем мы одного игрока по имени,
@@ -33,7 +32,7 @@ data class PlayerAttributes(
     @SerializedName("name")
     val name: String
 )
-// -----
+
 
 
 

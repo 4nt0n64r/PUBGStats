@@ -72,7 +72,7 @@ data class StatData(
 )
 
 
-
+//интерфейс используется в адаптере для RV
 interface StatisticsItem {
 
 }

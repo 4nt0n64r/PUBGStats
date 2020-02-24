@@ -23,15 +23,15 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val REPOSITORY = "repo"
-const val CLOUD_REPOSITORY = "cloud_repo"
-const val DATABASE = "database"
-const val DAO = "dao"
-const val INTERCEPTOR = "interceptor"
-const val GSON = "gson"
-const val OK_HTTP_CLIENT = "ok_http_client"
-const val RETROFIT = "retrofit"
-const val API_SERVICE = "api_service"
+//const val REPOSITORY = "repo"
+//const val CLOUD_REPOSITORY = "cloud_repo"
+//const val DATABASE = "database"
+//const val DAO = "dao"
+//const val INTERCEPTOR = "interceptor"
+//const val GSON = "gson"
+//const val OK_HTTP_CLIENT = "ok_http_client"
+//const val RETROFIT = "retrofit"
+//const val API_SERVICE = "api_service"
 
 
 val applicationModules = module(override = true) {
@@ -43,19 +43,19 @@ val applicationModules = module(override = true) {
 
     factory<AbstractAddPlayerPresenter> {
         AddPlayerPresenterImpl(
-            get<LocalRepository>(), get<NetworkRepository>()
+            get(), get()
         )
     }
 
     factory<AbstractListOfPlayersPresenter> {
         ListOfPlayersPresenterImpl(
-            get<LocalRepository>()
+            get()
         )
     }
 
     factory<AbstractStatisticsPresenter> {
         StatisticsPresenterImpl(
-            get<LocalRepository>(), get<NetworkRepository>()
+            get(), get()
         )
     }
 
@@ -63,7 +63,7 @@ val applicationModules = module(override = true) {
     factory<LocalRepository>() { LocalRepositoryImpl(get()) }
 
 //    database
-    single<MyDatabase>() {
+    single {
         Room
             .databaseBuilder(
                 androidContext(), MyDatabase::class.java, MyDatabase.DB_NAME
@@ -72,12 +72,12 @@ val applicationModules = module(override = true) {
     single<Dao>() { get<MyDatabase>().playerDao() }
 
 //    network
-    single<HttpLoggingInterceptor>() { provideInterceptor() }
-    single<Gson>() { provideGson() }
-    single<OkHttpClient>() { provideDefaultOkhttpClient(get()) }
-    single<Retrofit>() { provideRetrofit(get(), get()) }
-    single<ApiService>() { provideApiService(get()) }
-    factory<NetworkRepository>() { NetworkRepoImpl(get()) }
+    single { provideInterceptor() }
+    single { provideGson() }
+    single { provideDefaultOkhttpClient(get()) }
+    single { provideRetrofit(get(), get()) }
+    single { provideApiService(get()) }
+    factory<NetworkRepository>{ NetworkRepoImpl(get()) }
 
 }
 
@@ -105,8 +105,7 @@ fun provideDefaultOkhttpClient(interceptor: HttpLoggingInterceptor): OkHttpClien
 
 fun provideRetrofit(gson: Gson, client: OkHttpClient): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("https://api.pubg.com/shards/steam/")
-        //.baseUrl("https://api.pubg.com/shards/${platform}/")
+        .baseUrl("https://api.pubg.com/shards/")
         .client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()

@@ -76,4 +76,34 @@
     <string name="current_season">CURRENT SEASON</string>
     <string name="prev_season">PREVIOUS SEASON</string>
     <string name="loading">Loading</string>
+
+    <string-array name="platform">
+        <item name="steam" translatable="false">steam</item>
+        <item name="kakao" translatable="false">kakao</item>
+        <item name="psn" translatable="false">psn</item>
+        <item name="xbox" translatable="false">xbox</item>
+    </string-array>
+
+    <string-array name="region">
+        <item name="pc-ru" translatable="false">pc-ru</item>  <!--Russia-->
+        <item name="pc-as" translatable="false">pc-as</item>  <!--Asia-->
+        <item name="pc-eu" translatable="false">pc-eu</item>  <!--Europe-->
+        <item name="pc-jp" translatable="false">pc-jp</item>  <!--Japan-->
+        <item name="pc-kakao" translatable="false">pc-kakao</item>  <!--Kakao-->
+        <item name="pc-krjp" translatable="false">pc-krjp</item>  <!--Korea-->
+        <item name="pc-na" translatable="false">pc-na</item>  <!--North America-->
+        <item name="pc-oc" translatable="false">pc-oc</item>  <!--Oceania-->
+        <item name="pc-sa" translatable="false">pc-sa</item>  <!--South and Central America-->
+        <item name="pc-sea" translatable="false">pc-sea</item>  <!--South East Asia-->
+        <item name="psn-as" translatable="false">psn-as</item>  <!--Asia-->
+        <item name="psn-eu" translatable="false">psn-eu</item>  <!--Europe-->
+        <item name="psn-na" translatable="false">psn-na</item>  <!--North America-->
+        <item name="psn-oc" translatable="false">psn-oc</item>  <!--Oceania-->
+        <item name="xbox-as" translatable="false">xbox-as</item>  <!--Asia-->
+        <item name="xbox-eu" translatable="false">xbox-eu</item>  <!--Europe-->
+        <item name="xbox-na" translatable="false">xbox-na</item>  <!--North America-->
+        <item name="xbox-oc" translatable="false">xbox-oc</item>  <!--Oceania-->
+        <item name="xbox-sa" translatable="false">xbox-sa</item>  <!--South America-->
+    </string-array>
+
 </resources>

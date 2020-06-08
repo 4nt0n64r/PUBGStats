@@ -38,7 +38,7 @@ interface Dao {
     fun addDateToDB(dateSeasons: SeasonsDownloadDate)
 
     @Query("SELECT * from download_table" )
-    fun getDate(): SeasonsDownloadDate
+    fun getDate(): SeasonsDownloadDate?
 
     @Query("DELETE FROM download_table" )
     fun deleteDate()

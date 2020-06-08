@@ -37,7 +37,7 @@ class LocalRepositoryImpl(private val dao: Dao) : LocalRepository {
         dao.addDateToDB(dateOfDownload)
     }
 
-    override suspend fun getDownloadDateFromDB(): SeasonsDownloadDate {
+    override suspend fun getDownloadDateFromDB(): SeasonsDownloadDate? {
         return dao.getDate()
     }
 

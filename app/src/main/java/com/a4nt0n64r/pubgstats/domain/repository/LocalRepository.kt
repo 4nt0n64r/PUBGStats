@@ -16,7 +16,7 @@ interface LocalRepository {
     suspend fun deleteSeasonsFromDB()
 
     suspend fun addDownloadDateToDB(dateOfDownload: SeasonsDownloadDate)
-    suspend fun getDownloadDateFromDB():SeasonsDownloadDate
+    suspend fun getDownloadDateFromDB():SeasonsDownloadDate?
     suspend fun deleteDownloadDateFromDB()
 
 }

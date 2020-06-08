@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_gray_background" android:paddingStart="8dp" android:paddingTop="4dp"
-        android:paddingEnd="8dp" android:paddingBottom="4dp">
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        app:cardCornerRadius="4dp">
 
-    <TextView
-            android:layout_width="0dp"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/stat_text"
-            android:textColor="@color/white"
-            android:textSize="8pt"
-            android:text="@string/default_value"
-            android:layout_weight="2"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_marginStart="8dp"/>
+            android:background="@color/color_gray_background"
+            android:orientation="horizontal"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="4dp">
 
-    <TextView
-            android:layout_width="0dp"
-            android:textSize="8pt"
-            android:layout_height="wrap_content"
-            android:id="@+id/stat_points"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
-            android:text="@string/default_value"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/white"
-            android:layout_marginEnd="8dp"/>
+        <TextView
+                android:id="@+id/stat_text"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="2"
+                android:text="@string/default_value"
+                android:textColor="@color/white"
+                android:textSize="8pt" />
 
-</LinearLayout>
+        <TextView
+                android:id="@+id/stat_points"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/default_value"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="8pt" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

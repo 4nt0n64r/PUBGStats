@@ -36,8 +36,10 @@ interface ListOfPlayersFragmentView : MvpView {
     @StateStrategyType(SkipStrategy::class)
     fun showMinusButton()
     fun hideMinusButton()
+    fun showErrorTextAndImage()
+    fun hideErrorTextAndImage()
 
-    fun showPlayers(players: List<PlayerDBUI>)
+    fun showPlayers(players: List<PlayerUI>)
 
     @StateStrategyType(SkipStrategy::class)
     fun changeFragment(fragId: Int)
@@ -54,5 +56,7 @@ interface StatisticsFragmentView : MvpView {
     fun showSeasons(seasons:List<SeasonDB>)
     fun showPlayerName(player: PlayerDB)
 
+    fun showRegion(region:String)
+    fun showPlatform(platform:String)
 
 }

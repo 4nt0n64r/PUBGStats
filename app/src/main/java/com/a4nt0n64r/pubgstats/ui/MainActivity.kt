@@ -25,6 +25,8 @@ const val ADD_TO_BACKSTACK = "backstack"
 
 const val NAME = "name"
 const val ID = "id"
+const val REGION = "region"
+const val PLATFORM = "platform"
 
 const val REQUEST_PERMISSION_CODE = 0
 
@@ -106,6 +108,9 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
         val bundle = Bundle()
         bundle.putString(NAME, player.name)
         bundle.putString(ID, player.id)
+        bundle.putString(PLATFORM,player.platform)
+        bundle.putString(REGION,player.region)
+        
         statisticsFragment.arguments = bundle
 
         //Нужно передать аргументы

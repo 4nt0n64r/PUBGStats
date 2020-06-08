@@ -1,7 +1,7 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.list_of_players
 
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
-import com.a4nt0n64r.pubgstats.domain.model.PlayerDBUI
+import com.a4nt0n64r.pubgstats.domain.model.PlayerUI
 import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
 import com.a4nt0n64r.pubgstats.ui.ADD_PLAYER
 import com.a4nt0n64r.pubgstats.ui.base.AbstractListOfPlayersPresenter
@@ -20,7 +20,7 @@ class ListOfPlayersPresenterImpl(
         viewState.changeFragment(ADD_PLAYER)
     }
 
-    lateinit var listOfPlayersUI: List<PlayerDBUI>
+    lateinit var listOfPlayersUI: List<PlayerUI>
 
     var minusButtonIsShown = false
 
@@ -35,9 +35,16 @@ class ListOfPlayersPresenterImpl(
                 localRepository.getAllPlayersFromDB()
             }
             listOfPlayersUI =
-                listOfPlayers.await().map { PlayerDBUI(it.name, it.id, false) }
+                listOfPlayers.await()
+                    .map { PlayerUI(it.name, it.id, it.region, it.platform, false) }
             withContext(Dispatchers.Main) {
-                viewState.showPlayers(listOfPlayersUI)
+                if (listOfPlayersUI.isNullOrEmpty()){
+                    viewState.showErrorTextAndImage()
+                }else{
+                    viewState.hideErrorTextAndImage()
+                    viewState.showPlayers(listOfPlayersUI)
+                }
+
             }
         }
     }
@@ -45,7 +52,8 @@ class ListOfPlayersPresenterImpl(
     override fun onPlayerTouched(position: Int) {
         CoroutineScope(Dispatchers.Main + job).launch {
             withContext(Dispatchers.Main) {
-                val listOfPlayersInRV = listOfPlayersUI.map { PlayerDB(it.name, it.id) }
+                val listOfPlayersInRV =
+                    listOfPlayersUI.map { PlayerDB(it.name, it.id, it.region, it.platform) }
                 viewState.showPlayerStatistics(listOfPlayersInRV[position])
             }
         }
@@ -74,7 +82,7 @@ class ListOfPlayersPresenterImpl(
         CoroutineScope(Dispatchers.IO + job).launch {
             for (item in listOfPlayersUI) {
                 if (item.isSelected) {
-                    val playerToDel = PlayerDB(item.name, item.id)
+                    val playerToDel = PlayerDB(item.name, item.id, item.region, item.platform)
                     localRepository.deletePlayerFromDB(playerToDel)
                 }
             }
@@ -82,7 +90,8 @@ class ListOfPlayersPresenterImpl(
                 localRepository.getAllPlayersFromDB()
             }
             listOfPlayersUI =
-                listOfPlayers.await().map { PlayerDBUI(it.name, it.id, false) }
+                listOfPlayers.await()
+                    .map { PlayerUI(it.name, it.id, it.region, it.platform, false) }
             withContext(Dispatchers.Main) {
                 viewState.showPlayers(listOfPlayersUI)
                 viewState.hideMinusButton()

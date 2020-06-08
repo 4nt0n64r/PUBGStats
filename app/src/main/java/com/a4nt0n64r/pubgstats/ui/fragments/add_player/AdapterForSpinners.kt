@@ -1,4 +1,4 @@
-package com.a4nt0n64r.pubgstats.ui.fragments.statistics
+package com.a4nt0n64r.pubgstats.ui.fragments.add_player
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.a4nt0n64r.pubgstats.R
-import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
 import kotlinx.android.synthetic.main.spinner_item.view.*
 
-class AdapterForSpinner(context: Context, seasons: List<SeasonDB>) :
-    ArrayAdapter<SeasonDB>(context, 0, seasons) {
+class AdapterForSpinner(context: Context, items: Array<String>) :
+    ArrayAdapter<String>(context, 0, items) {
 
     fun updateView() {
         notifyDataSetChanged()
@@ -25,14 +24,13 @@ class AdapterForSpinner(context: Context, seasons: List<SeasonDB>) :
     }
 
     private fun createView(position: Int, recycledView: View?, parent: ViewGroup): View {
-        val season = getItem(position)
+        val item = getItem(position)
         val view = recycledView ?: LayoutInflater.from(context).inflate(
             R.layout.spinner_item,
             parent,
             false
         )
-        view.season_name_tv.text = season.name
+        view.spinner_item_text.text = item
         return view
     }
 }
-

@@ -23,16 +23,6 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-//const val REPOSITORY = "repo"
-//const val CLOUD_REPOSITORY = "cloud_repo"
-//const val DATABASE = "database"
-//const val DAO = "dao"
-//const val INTERCEPTOR = "interceptor"
-//const val GSON = "gson"
-//const val OK_HTTP_CLIENT = "ok_http_client"
-//const val RETROFIT = "retrofit"
-//const val API_SERVICE = "api_service"
-
 
 val applicationModules = module(override = true) {
 

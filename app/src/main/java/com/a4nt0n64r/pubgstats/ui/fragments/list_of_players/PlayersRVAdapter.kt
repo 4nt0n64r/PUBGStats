@@ -8,27 +8,27 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.a4nt0n64r.pubgstats.R
-import com.a4nt0n64r.pubgstats.domain.model.PlayerDBUI
+import com.a4nt0n64r.pubgstats.domain.model.PlayerUI
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 
-class PlayersRVAdapter : ListDelegationAdapter<List<PlayerDBUI>>() {
+class PlayersRVAdapter : ListDelegationAdapter<List<PlayerUI>>() {
 
     init {
         delegatesManager.addDelegate(PlayerDelegate())
     }
 
-    fun setData(data: List<PlayerDBUI>) {
+    fun setData(data: List<PlayerUI>) {
         this.items = data
         notifyDataSetChanged()
     }
 }
 
 private class PlayerDelegate :
-    AbsListItemAdapterDelegate<PlayerDBUI, PlayerDBUI, PlayerDelegate.ViewHolder>() {
+    AbsListItemAdapterDelegate<PlayerUI, PlayerUI, PlayerDelegate.ViewHolder>() {
 
-    override fun isForViewType(item: PlayerDBUI, items: List<PlayerDBUI>, position: Int): Boolean {
-        return item is PlayerDBUI
+    override fun isForViewType(item: PlayerUI, items: List<PlayerUI>, position: Int): Boolean {
+        return item is PlayerUI
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -41,7 +41,7 @@ private class PlayerDelegate :
         )
     }
 
-    override fun onBindViewHolder(item: PlayerDBUI, viewHolder: ViewHolder, payloads: List<Any>) {
+    override fun onBindViewHolder(item: PlayerUI, viewHolder: ViewHolder, payloads: List<Any>) {
         viewHolder.playerName.text = item.name
 
         when (item.isSelected) {

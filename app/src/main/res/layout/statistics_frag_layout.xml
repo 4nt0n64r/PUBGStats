@@ -1,77 +1,99 @@
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools" android:background="@color/color_main_background"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:id="@+id/frame_layout">
+        android:layout_height="match_parent"
+        android:background="@color/color_main_background">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
         <LinearLayout
-                android:layout_width="0dp"
+                android:id="@+id/stat_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"
-                android:id="@+id/linearLayout2">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/constr_stat_head">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                 <TextView
                         android:id="@+id/txt_playerName"
-                        style="@style/Base.TextAppearance.AppCompat.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="@string/stat_txt_title" />
 
                 <Spinner
-                        android:layout_width="wrap_content"
-                        android:spinnerMode="dialog"
-                        android:layout_height="wrap_content"
                         android:id="@+id/spinner"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/txt_playerName" android:layout_marginStart="8dp"
-                        app:layout_constraintTop_toTopOf="parent" android:textAlignment="center"
-                        android:backgroundTint="@color/color_main_background"
-                        />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@color/color_yellow_background"
+                        android:spinnerMode="dialog"
+                        android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                <TextView
+                        android:id="@+id/platform_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_yellow_background"
+                        app:layout_constraintTop_toBottomOf="@id/txt_playerName"
+                        tools:text="LoremIpsum..." />
+
+                <TextView
+                        android:id="@+id/region_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_yellow_background"
+                        tools:layout_editor_absoluteY="5dp"
+                        tools:text="LoremIpsum..." />
+            </LinearLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
+
+
         <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/stat_data_rv"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/stat_data_rv"
-
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/navigation"
-                >
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stat_header">
 
         </androidx.recyclerview.widget.RecyclerView>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:itemIconTint="@drawable/selector_for_bnv"
                 android:background="@color/color_main_background"
+                app:itemIconTint="@drawable/selector_for_bnv"
                 app:itemTextColor="@drawable/selector_for_bnv"
-                app:menu="@menu/navigation"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:menu="@menu/navigation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

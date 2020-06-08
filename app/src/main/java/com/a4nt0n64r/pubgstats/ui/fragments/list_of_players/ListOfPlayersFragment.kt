@@ -3,11 +3,13 @@ package com.a4nt0n64r.pubgstats.ui.fragments.list_of_players
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
-import com.a4nt0n64r.pubgstats.domain.model.PlayerDBUI
+import com.a4nt0n64r.pubgstats.domain.model.PlayerUI
 import com.a4nt0n64r.pubgstats.ui.ADD_PLAYER
 import com.a4nt0n64r.pubgstats.ui.MainActivity
 import com.a4nt0n64r.pubgstats.ui.base.AbstractListOfPlayersPresenter
@@ -79,7 +81,12 @@ class ListOfPlayersFragment : MvpAppCompatFragment(), ListOfPlayersFragmentView,
         }
     }
 
-    override fun showPlayers(players: List<PlayerDBUI>) {
+    override fun onResume() {
+        super.onResume()
+        presenter.requestPlayersFromDB()
+    }
+
+    override fun showPlayers(players: List<PlayerUI>) {
         adapter.setData(players)
     }
 
@@ -90,6 +97,16 @@ class ListOfPlayersFragment : MvpAppCompatFragment(), ListOfPlayersFragmentView,
                 activity.drawFragment(ADD_PLAYER)
             }
         }
+    }
+
+    override fun showErrorTextAndImage() {
+        error_empty_players_messge.visibility = VISIBLE
+        error_image.visibility = VISIBLE
+    }
+
+    override fun hideErrorTextAndImage() {
+        error_empty_players_messge.visibility = INVISIBLE
+        error_image.visibility = INVISIBLE
     }
 
     override fun showPlayerStatistics(player: PlayerDB) {

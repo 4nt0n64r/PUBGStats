@@ -3,8 +3,6 @@ package com.a4nt0n64r.pubgstats.ui.base
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import moxy.MvpPresenter
 
-
-//Тут описаны события которые могут происходить (нажата кнопка, выделен элемент...)
 interface ActivityPresenter {
 
     fun loadFragment(fragmentId: Int)
@@ -14,7 +12,7 @@ interface ActivityPresenter {
 
 interface AddPlayerPresenter {
 
-    fun requestPlayer(name: String?)
+    fun requestPlayer(name: String?,region: String, platform :String)
     fun onDestroy()
 }
 
@@ -32,8 +30,12 @@ interface ListOfPlayersPresenter {
 interface StatisticsPresenter {
 
     fun setParameters(player: PlayerDB, prevSeason: String, currentSeason: String)
+
     fun setSeasons()
     suspend fun shouldDownloadNewSeasons(): Boolean
+
+    fun setStatistics()
+    suspend fun shouldDownloadStatistics(): Boolean
 
 }
 

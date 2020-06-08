@@ -1,6 +1,7 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.statistics
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
 import com.a4nt0n64r.pubgstats.domain.model.StatisticsItem
 import com.a4nt0n64r.pubgstats.ui.ID
 import com.a4nt0n64r.pubgstats.ui.NAME
+import com.a4nt0n64r.pubgstats.ui.PLATFORM
+import com.a4nt0n64r.pubgstats.ui.REGION
 import com.a4nt0n64r.pubgstats.ui.base.AbstractStatisticsPresenter
 import com.a4nt0n64r.pubgstats.ui.base.StatisticsFragmentView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -25,6 +28,8 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
 
     lateinit var playerId: String
     lateinit var nameOfPlayer: String
+    lateinit var playerRegion: String
+    lateinit var playerPlatform: String
     val rvAdapter = StatisticsAdapter()
 
     @InjectPresenter
@@ -49,6 +54,9 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         setParametersInPresenter()
         setOnNavigationItemListener()
 
+        presenter.setSeasons()
+        //крашится т.к. статка запрашивается одновременно с сезонами
+        //presenter.setStatistics()
     }
 
     private fun getParametersFromBundle() {
@@ -56,28 +64,38 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         if (bundle != null) {
             nameOfPlayer = bundle.getString(NAME)!!
             playerId = bundle.getString(ID)!!
+            playerRegion = bundle.getString(REGION)!!
+            playerPlatform = bundle.getString(PLATFORM)!!
         }
     }
 
     private fun setParametersInPresenter() {
         presenter.setParameters(
-            PlayerDB(nameOfPlayer, playerId),
+            PlayerDB(nameOfPlayer, playerId, playerRegion, playerPlatform),
             getString(R.string.prev_season),
             getString(R.string.current_season)
         )
-        presenter.setSeasons()
     }
 
     private fun setOnNavigationItemListener() {
         val onNavigationItemSelectedListener =
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
-
+                when (item.itemId) {
+                    R.id.navigation_solo -> {
+                        presenter.setStatistics()
+                    }
+                    R.id.navigation_duo -> {
+                        presenter.setStatistics()
+                    }
+                    R.id.navigation_squad -> {
+                        presenter.setStatistics()
+                    }
+                }
                 return@OnNavigationItemSelectedListener true
             }
 
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
-
 
     override fun showPlayerName(player: PlayerDB) {
         txt_playerName.text = player.name
@@ -88,8 +106,22 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
     }
 
     override fun showSeasons(seasons: List<SeasonDB>) {
-        val spAdapter = AdapterForSpinner(context!!, seasons)
+        val spAdapter = AdapterForStatSpinner(context!!, seasons)
         spinner.adapter = spAdapter
         spAdapter.updateView()
     }
+
+    override fun showRegion(region: String) {
+        region_tv.text = region
+        Log.d("BUG", region)
+    }
+
+    override fun showPlatform(platform: String) {
+        platform_tv.text = platform
+        Log.d("BUG", platform)
+    }
 }
+
+
+
+

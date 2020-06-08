@@ -18,22 +18,22 @@ class AddPlayerPresenterImpl(
 
     private val job: Job by lazy { SupervisorJob() }
 
-    override fun requestPlayer(name: String?) {
+    override fun requestPlayer(name: String?, region: String, platform: String) {
         if (name == "") {
             viewState.showSnackbar("Введите имя!")
         } else {
-            getPlayerFromApi(name!!)
-            viewState.changeFragment()
+            getPlayerFromApi(name!!,region,platform)
         }
     }
 
     @WorkerThread
-    private fun getPlayerFromApi(name: String) {
+    private fun getPlayerFromApi(name: String, region: String, platform: String) {
         CoroutineScope(Dispatchers.IO + job).launch {
             try {
                 viewState.requestInternetPermissionFromFragment()
                 val dataFromApi = networkRepository.getNetPlayer(name)
-                localRepository.addPlayerToDB(PlayerDB(dataFromApi.getName(), dataFromApi.getId()))
+                localRepository.addPlayerToDB(PlayerDB(dataFromApi.getName(), dataFromApi.getId(),region,platform))
+                viewState.changeFragment()
             } catch (e: NullPointerException) {
                 viewState.showSnackbar("Данные не пришли!")
             }

@@ -38,12 +38,41 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //test
         requestInternetPermissionFromFragment()
 
+        setUpSpinners()
+
         btn_find.setOnClickListener {
-            presenter.requestPlayer(input_login.text.toString())
+            presenter.requestPlayer(
+                input_login.text.toString(),
+                region_spinner.selectedItem.toString(),
+                platform_spinner.selectedItem.toString()
+            )
         }
+
+    }
+
+    private fun setUpSpinners() {
+        val activity = this@AddPlayerFragment.activity as MainActivity
+        setUpRegions(activity)
+        setUpPlatforms(activity)
+    }
+
+    private fun setUpRegions(activity: MainActivity) {
+        val regions = getResources().getStringArray(R.array.region)
+        val regionAdapter = AdapterForSpinner(activity, regions)
+        region_spinner.adapter = regionAdapter
+    }
+
+    private fun setUpPlatforms(activity: MainActivity) {
+        val platforms = getResources().getStringArray(R.array.platform)
+        val platformAdapter = AdapterForSpinner(activity, platforms)
+        platform_spinner.adapter = platformAdapter
+    }
+
+    override fun requestInternetPermissionFromFragment() {
+        val activity = this@AddPlayerFragment.activity as MainActivity
+        activity.requestInternetPermission()
     }
 
     override fun changeFragment() {
@@ -59,9 +88,5 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
         snack.show()
     }
 
-    override fun requestInternetPermissionFromFragment(){
-        val activity = this@AddPlayerFragment.activity as MainActivity
-        activity.requestInternetPermission()
-    }
 
 }

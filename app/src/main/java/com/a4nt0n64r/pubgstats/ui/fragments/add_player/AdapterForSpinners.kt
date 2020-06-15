@@ -1,12 +1,15 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.add_player
 
 import android.content.Context
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import com.a4nt0n64r.pubgstats.R
 import kotlinx.android.synthetic.main.spinner_item.view.*
+
 
 class AdapterForSpinner(context: Context, items: Array<String>) :
     ArrayAdapter<String>(context, 0, items) {

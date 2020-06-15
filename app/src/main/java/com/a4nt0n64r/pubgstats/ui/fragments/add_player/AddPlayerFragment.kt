@@ -50,6 +50,9 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
             )
         }
 
+
+
+
     }
 
     private fun setUpSpinners() {

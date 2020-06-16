@@ -31,6 +31,7 @@
         your nickname to get data.
     </string>
     <string name="err_no_internet">Your internet connection is not stable. Reconnect to network to continue.</string>
+    <string name="err_enter_player_name">Please enter name.</string>
 
     <!-- strings for statistics -->
     <string name="assists">Assists</string>

@@ -1,8 +1,6 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.add_player
 
-import android.Manifest
 import androidx.annotation.WorkerThread
-import androidx.core.app.ActivityCompat
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
 import com.a4nt0n64r.pubgstats.network.NetworkRepository
@@ -22,7 +20,7 @@ class AddPlayerPresenterImpl(
         if (name == "") {
             viewState.showSnackbar("Введите имя!")
         } else {
-            getPlayerFromApi(name!!,region,platform)
+            getPlayerFromApi(name!!, region, platform)
         }
     }
 
@@ -32,17 +30,22 @@ class AddPlayerPresenterImpl(
             try {
                 viewState.requestInternetPermissionFromFragment()
                 val dataFromApi = networkRepository.getNetPlayer(name)
-                localRepository.addPlayerToDB(PlayerDB(dataFromApi.getName(), dataFromApi.getId(),region,platform))
+                localRepository.addPlayerToDB(
+                    PlayerDB(
+                        dataFromApi.getName(),
+                        dataFromApi.getId(),
+                        region,
+                        platform
+                    )
+                )
                 viewState.changeFragment()
             } catch (e: NullPointerException) {
                 viewState.showSnackbar("Данные не пришли!")
             }
-
         }
     }
 
     override fun onDestroy() {
         job.cancel()
     }
-
 }

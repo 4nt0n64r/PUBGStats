@@ -49,10 +49,6 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                 platform_spinner.selectedItem.toString()
             )
         }
-
-
-
-
     }
 
     private fun setUpSpinners() {
@@ -84,12 +80,10 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
     }
 
     override fun showSnackbar(msg: String) {
-        val snack = Snackbar.make(parent, msg, Snackbar.LENGTH_LONG)
-        val sv = snack.view
-        val tv = sv.findViewById<TextView>(R.id.snackbar_text)
+        val snackbar = Snackbar.make(parent, msg, Snackbar.LENGTH_LONG)
+        val snackView = snackbar.view
+        val tv = snackView.findViewById<TextView>(R.id.snackbar_text)
         tv.setTextColor(ContextCompat.getColor(context!!, R.color.color_yellow_background))
-        snack.show()
+        snackbar.show()
     }
-
-
 }

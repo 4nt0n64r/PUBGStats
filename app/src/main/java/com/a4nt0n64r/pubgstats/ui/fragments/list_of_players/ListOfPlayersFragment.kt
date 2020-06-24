@@ -52,8 +52,6 @@ class ListOfPlayersFragment : MvpAppCompatFragment(), ListOfPlayersFragmentView,
         my_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
         my_recycler_view.adapter = adapter
 
-        //TODO("в первый раз при пустой приложухе игрока не показывает")
-
         presenter.requestPlayersFromDB()
 
         my_recycler_view.addOnItemTouchListener(

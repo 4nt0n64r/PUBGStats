@@ -3,7 +3,7 @@
     <string name="begin_btn">Найти</string>
     <string name="begin_txt_hint">имя игрока</string>
     <string name="begin_txt_title">Добро пожаловать</string>
-    <string name="list_txt_title">Выберите имя игрока</string>
+    <string name="list_txt_title">Выберите игрока</string>
     <string name="stat_txt_kills">Статистика по убийствам</string>
     <string name="err_empty_players">Упс! Кажется, вы не добавили ни одного игрока для просмотра статистики. Пожалуйста,
         зайдите и введите Ваш ник для получения данных.

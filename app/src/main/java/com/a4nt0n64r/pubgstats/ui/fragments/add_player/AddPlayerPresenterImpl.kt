@@ -18,7 +18,7 @@ class AddPlayerPresenterImpl(
 
     override fun requestPlayer(name: String?, region: String, platform: String) {
         if (name == "") {
-            viewState.showSnackbar("Введите имя!")
+            viewState.showSnackbar(EMPTY_NAME)
         } else {
             getPlayerFromApi(name!!, region, platform)
         }
@@ -40,7 +40,7 @@ class AddPlayerPresenterImpl(
                 )
                 viewState.changeFragment()
             } catch (e: NullPointerException) {
-                viewState.showSnackbar("Данные не пришли!")
+                viewState.showSnackbar(NOT_FOUND)
             }
         }
     }

@@ -1,11 +1,13 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.add_player
 
 import android.os.Bundle
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+
 import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.ui.LIST_OF_PLAYERS
 import com.a4nt0n64r.pubgstats.ui.MainActivity
@@ -18,6 +20,9 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import org.koin.core.KoinComponent
 import org.koin.core.get
+
+const val NOT_FOUND = 0
+const val EMPTY_NAME = 1
 
 
 class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinComponent {
@@ -40,6 +45,8 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
 
         requestInternetPermissionFromFragment()
 
+        setUpTextViews()
+
         setUpSpinners()
 
         btn_find.setOnClickListener {
@@ -49,6 +56,11 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                 platform_spinner.selectedItem.toString()
             )
         }
+    }
+
+    private fun setUpTextViews() {
+        platform_tv.setText(getString(R.string.platform))
+        region_tv.setText(getString(R.string.region))
     }
 
     private fun setUpSpinners() {
@@ -79,9 +91,15 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
         activity.drawFragment(LIST_OF_PLAYERS)
     }
 
-    override fun showSnackbar(msg: String) {
-        val snackbar = Snackbar.make(parent, msg, Snackbar.LENGTH_LONG)
+    override fun showSnackbar(msg_id: Int) {
+        var message = ""
+        when(msg_id){
+            NOT_FOUND -> {message = getString(R.string.err_player_not_found)}
+            EMPTY_NAME -> {message = getString(R.string.err_enter_player_name)}
+        }
+        val snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG)
         val snackView = snackbar.view
+        snackView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
         val tv = snackView.findViewById<TextView>(R.id.snackbar_text)
         tv.setTextColor(ContextCompat.getColor(context!!, R.color.color_yellow_background))
         snackbar.show()

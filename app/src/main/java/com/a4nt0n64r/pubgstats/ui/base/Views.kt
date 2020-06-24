@@ -21,7 +21,7 @@ interface ActivityView : MvpView {
 @StateStrategyType(SingleStateStrategy::class)
 interface AddPlayerFragmentView : MvpView {
 
-    fun showSnackbar(msg: String)
+    fun showSnackbar(msg: Int)
 
     @StateStrategyType(SkipStrategy::class)
     fun changeFragment()

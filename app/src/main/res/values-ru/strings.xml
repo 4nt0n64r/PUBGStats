@@ -55,4 +55,7 @@
     <string name="prev_season">ПРЕД. СЕЗОН</string>
     <string name="loading">Загрузка</string>
     <string name="err_enter_player_name">Пожалуйста введите имя.</string>
+    <string name="err_player_not_found">Игрок не найден.</string>
+    <string name="platform">Платформа</string>
+    <string name="region">Регион</string>
 </resources>

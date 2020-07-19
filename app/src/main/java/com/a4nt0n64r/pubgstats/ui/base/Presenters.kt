@@ -12,7 +12,7 @@ interface ActivityPresenter {
 
 interface AddPlayerPresenter {
 
-    fun requestPlayer(name: String?,region: String, platform :String)
+    fun requestPlayer(name: String?, region: String, platform: String)
     fun onDestroy()
 }
 
@@ -29,13 +29,22 @@ interface ListOfPlayersPresenter {
 
 interface StatisticsPresenter {
 
-    fun setParameters(player: PlayerDB, prevSeason: String, currentSeason: String)
+    fun setPlayerParameters(player: PlayerDB)
+    fun setSeasonParameters(prevSeason: String, currentSeason: String)
+    fun setRegimeParameters(tpp: String, fpp: String)
 
     fun setSeasons()
     suspend fun shouldDownloadNewSeasons(): Boolean
 
     fun setStatistics()
     suspend fun shouldDownloadStatistics(): Boolean
+
+    fun setSoloTpp()
+    fun setSoloFpp()
+    fun setDuoTpp()
+    fun setDuoFpp()
+    fun setSquadTpp()
+    fun setSquadFpp()
 
 }
 

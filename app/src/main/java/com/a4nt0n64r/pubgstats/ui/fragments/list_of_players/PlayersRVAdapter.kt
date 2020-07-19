@@ -42,16 +42,23 @@ private class PlayerDelegate :
     }
 
     override fun onBindViewHolder(item: PlayerUI, viewHolder: ViewHolder, payloads: List<Any>) {
+
         viewHolder.playerName.text = item.name
+        viewHolder.playerPlatform.text = item.platform
+        viewHolder.playerRegion.text = item.region
 
         when (item.isSelected) {
             true -> {
                 viewHolder.card.setCardBackgroundColor(Color.parseColor("#FFAB00"))// acc
-                viewHolder.playerName!!.setTextColor(Color.parseColor("#000000"))// pr dark
+                viewHolder.playerName.setTextColor(Color.parseColor("#000000"))// pr dark
+                viewHolder.playerRegion.setTextColor(Color.parseColor("#000000"))// pr dark
+                viewHolder.playerPlatform.setTextColor(Color.parseColor("#000000"))// pr dark
             }
             false -> {
                 viewHolder.card.setCardBackgroundColor(Color.parseColor("#424242"))// bkg it
-                viewHolder.playerName!!.setTextColor(Color.parseColor("#FFAB00"))// acc
+                viewHolder.playerName.setTextColor(Color.parseColor("#FFAB00"))// acc
+                viewHolder.playerRegion.setTextColor(Color.parseColor("#FFAB00"))// acc
+                viewHolder.playerPlatform.setTextColor(Color.parseColor("#FFAB00"))// acc
             }
         }
 
@@ -59,6 +66,8 @@ private class PlayerDelegate :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val playerName: TextView = itemView.findViewById(R.id.item_name)
-        val card:CardView = itemView.findViewById(R.id.item_background)
+        val card: CardView = itemView.findViewById(R.id.item_background)
+        val playerRegion: TextView = itemView.findViewById(R.id.item_region)
+        val playerPlatform: TextView = itemView.findViewById(R.id.item_platform)
     }
 }

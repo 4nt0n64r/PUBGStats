@@ -11,6 +11,7 @@ import com.a4nt0n64r.pubgstats.ui.base.AbstractStatisticsPresenter
 import kotlinx.coroutines.*
 import moxy.InjectViewState
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 
 @InjectViewState
@@ -21,25 +22,31 @@ class StatisticsPresenterImpl(
 
     private lateinit var player: PlayerDB
     private lateinit var seasons: List<SeasonDB>
-    private var statistics: List<StatisticsItem> = emptyList()
+    private lateinit var statistics: StatisticsDB
 
     private var previousSeasonName: String = ""
     private var currentSeasonName: String = ""
 
+    private var tpp: String = ""
+    private var fpp: String = ""
+
     private val job: Job by lazy { SupervisorJob() }
 
-    override fun setParameters(player: PlayerDB, prevSeason: String, currentSeason: String) {
+    //Не работает функция!
+    override fun setPlayerParameters(player: PlayerDB) {
         this.player = player
-        this.previousSeasonName = prevSeason
-        this.currentSeasonName = currentSeason
-        displayParameters(this.player)
-//        TODO("Почему-то не отображает текствьюхи, очень странно")
+        viewState.showPlayerName(this.player.name)
     }
 
-    private fun displayParameters(player: PlayerDB) {
-        viewState.showPlatform(player.platform)
-        viewState.showRegion(player.region)
-//        viewState.showPlayerName(player)
+    override fun setSeasonParameters(prevSeason: String, currentSeason: String) {
+        this.previousSeasonName = prevSeason
+        this.currentSeasonName = currentSeason
+    }
+
+    override fun setRegimeParameters(tpp: String, fpp: String) {
+        this.tpp = tpp
+        this.fpp = fpp
+        viewState.showRegimes(this.tpp, this.fpp)
     }
 
     override fun setSeasons() {
@@ -57,6 +64,7 @@ class StatisticsPresenterImpl(
                 }
             }
             viewState.showSeasons(seasons)
+            viewState.initiateStatisticsLoading()
         }
     }
 
@@ -69,14 +77,12 @@ class StatisticsPresenterImpl(
             val currentSeasonApi = dataFromApi.seasons[dataFromApi.seasons.size - 1]
 
             val previousSeasonDB =
-                SeasonDB(previousSeasonApi.id, previousSeasonName, false)
+                SeasonDB(previousSeasonApi.id, previousSeasonName, false, LocalDate.now())
             val currentSeasonDB =
-                SeasonDB(currentSeasonApi.id, currentSeasonName, true)
+                SeasonDB(currentSeasonApi.id, currentSeasonName, true, LocalDate.now())
 
             localRepository.addSeasonToDB(currentSeasonDB)
             localRepository.addSeasonToDB(previousSeasonDB)
-
-            localRepository.addDownloadDateToDB(SeasonsDownloadDate(LocalDate.now().dayOfYear))
 
             return localRepository.getAllSeasonsFromDB()
         } catch (e: NullPointerException) {
@@ -85,169 +91,59 @@ class StatisticsPresenterImpl(
         }
     }
 
+    override suspend fun shouldDownloadNewSeasons(): Boolean {
+
+        val lastDownloadDate: LocalDate? = localRepository.getLastDownloadSeasonsDate()
+
+        val todayDate = LocalDate.now()
+
+        if (lastDownloadDate != null) {
+            Log.d(
+                "INFO",
+                "For seasons updating left ${ChronoUnit.DAYS.between(lastDownloadDate, todayDate)}"
+            )
+            return ChronoUnit.DAYS.between(lastDownloadDate, todayDate) >= 30
+        } else return true
+    }
+
     override fun setStatistics() {
         CoroutineScope(Dispatchers.IO + job).launch {
             val shouldDownloadStatistics = withContext(Dispatchers.IO) {
                 shouldDownloadStatistics()
             }
 
-            if (shouldDownloadStatistics) {
-                statistics = getNewStatistics()
-                withContext(Dispatchers.Main) {
-                    viewState.showStatistics(statistics)
+            statistics = withContext(Dispatchers.IO) {
+                if (shouldDownloadStatistics) {
+                    localRepository.deleteStatisticsForPlayer(player)
+                    getNewStatistics()
+                } else {
+                    localRepository.getStatisticsForPlayer(player)
                 }
+            }
+            withContext(Dispatchers.Main) {
+                viewState.showStatistics(statisticsToListConverter(statistics.soloTpp))
             }
         }
     }
 
-    override suspend fun shouldDownloadNewSeasons(): Boolean {
-        val lastDownload = localRepository.getDownloadDateFromDB()
-        if (lastDownload != null) {
-            return LocalDate.now().dayOfYear != lastDownload.lastDownloadOfSeasons
-        } else {
-            return true
-        }
-    }
 
     @WorkerThread
-    private suspend fun getNewStatistics(): List<StatisticsItem> {
-        try {
-            //(TODO) - cделать выбор по сезону
-//            seasonsListUI[spinner.selectedItemPosition].seasonId
-            val dataFromApi = networkRepository.getNetStatistics(player, seasons[0])
-            statistics = listOf<StatisticsItem>(
-                StatisticsHeader(PUBGStatsApplication.resourses!!.getString(R.string.stat_txt_rank)),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.rankPoints),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.rankPoints.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.bestRankPoint),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.bestRankPoint.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.roundsPlayed),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.roundsPlayed.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.assists),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.assists.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.top10s),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.top10s.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.mostSurvivalTime),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.mostSurvivalTime.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.swimDistance),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.swimDistance.toString()
-                ),
+    private suspend fun getNewStatistics(): StatisticsDB {
 
-                StatisticsHeader(PUBGStatsApplication.resourses!!.getString(R.string.stat_txt_kills)),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.kills),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.kills.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.longestKill),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.longestKill.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.roundMostKills),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.roundMostKills.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.headshotKills),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.headshotKills.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.dailyKills),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.dailyKills.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.weeklyKills),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.weeklyKills.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.maxKillStreaks),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.maxKillStreaks.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.roadKills),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.roadKills.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.teamKills),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.teamKills.toString()
-                ),
+        val statisticsFromApi = networkRepository.getNetStatistics(player, seasons[0])
 
-                StatisticsHeader(PUBGStatsApplication.resourses!!.getString(R.string.stat_txt_other)),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.dBNOs),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.dBNOs.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.dailyWins),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.dailyWins.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.boosts),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.boosts.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.damageDealt),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.damageDealt.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.days),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.days.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.heals),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.heals.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.losses),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.losses.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.revives),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.revives.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.rideDistance),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.rideDistance.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.suicides),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.suicides.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.vehicleDestroys),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.vehicleDestroys.toString()
-                ),
-                StatisticsPoints(
-                    PUBGStatsApplication.resourses!!.getString(R.string.weaponsAcquired),
-                    dataFromApi.data.seasonAttributes.gameModeStats.solo_fpp.weaponsAcquired.toString()
-                )
-            )
-            //TODO добавить статистику в DB
-//            localRepository.addSeasonToDB(currentSeasonDB)
+        val statisticsDB = StatisticsDB(
+            player.id, statisticsFromApi.data.seasonAttributes.gameModeStats.solo_fpp,
+            statisticsFromApi.data.seasonAttributes.gameModeStats.duo_fpp,
+            statisticsFromApi.data.seasonAttributes.gameModeStats.squad_fpp,
+            statisticsFromApi.data.seasonAttributes.gameModeStats.solo,
+            statisticsFromApi.data.seasonAttributes.gameModeStats.duo,
+            statisticsFromApi.data.seasonAttributes.gameModeStats.squad,
+            LocalDate.now()
+        )
 
-            //TODO добавить дату в DB
-//            localRepository.addDownloadDateToDB(SeasonsDownloadDate(LocalDate.now().dayOfYear))
+        return statisticsDB
 
-            //TODO вернуть статистику из DB
-//            return localRepository.getAllSeasonsFromDB()
-            return statistics
-        } catch (e: NullPointerException) {
-            Log.d("ERROR", "No data (seasons)")
-            val dataFromApi = networkRepository.getNetStatistics(player, seasons[0])
-            return emptyList()
-        }
     }
 
     override suspend fun shouldDownloadStatistics(): Boolean {
@@ -255,8 +151,155 @@ class StatisticsPresenterImpl(
         return true
     }
 
+    override fun setSoloTpp() {
+        viewState.showStatistics(statisticsToListConverter(statistics.soloTpp))
+    }
+
+    override fun setSoloFpp() {
+        viewState.showStatistics(statisticsToListConverter(statistics.soloFpp))
+    }
+
+    override fun setDuoTpp() {
+        viewState.showStatistics(statisticsToListConverter(statistics.duoTpp))
+    }
+
+    override fun setDuoFpp() {
+        viewState.showStatistics(statisticsToListConverter(statistics.duoFpp))
+    }
+
+    override fun setSquadTpp() {
+        viewState.showStatistics(statisticsToListConverter(statistics.squadTpp))
+    }
+
+    override fun setSquadFpp() {
+        viewState.showStatistics(statisticsToListConverter(statistics.squadFpp))
+    }
+
     override fun onDestroy() {
         job.cancel()
     }
-}
 
+
+    fun statisticsToListConverter(statisticsData: StatData): List<StatisticsItem> {
+        val statistics = listOf<StatisticsItem>(
+            StatisticsHeader(PUBGStatsApplication.resourses!!.getString(R.string.stat_txt_rank)),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.rankPoints),
+                statisticsData.rankPoints.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.bestRankPoint),
+                statisticsData.bestRankPoint.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.roundsPlayed),
+                statisticsData.roundsPlayed.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.assists),
+                statisticsData.assists.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.top10s),
+                statisticsData.top10s.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.mostSurvivalTime),
+                statisticsData.mostSurvivalTime.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.swimDistance),
+                statisticsData.swimDistance.toString()
+            ),
+
+            StatisticsHeader(PUBGStatsApplication.resourses!!.getString(R.string.stat_txt_kills)),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.kills),
+                statisticsData.kills.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.longestKill),
+                statisticsData.longestKill.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.roundMostKills),
+                statisticsData.roundMostKills.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.headshotKills),
+                statisticsData.headshotKills.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.dailyKills),
+                statisticsData.dailyKills.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.weeklyKills),
+                statisticsData.weeklyKills.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.maxKillStreaks),
+                statisticsData.maxKillStreaks.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.roadKills),
+                statisticsData.roadKills.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.teamKills),
+                statisticsData.teamKills.toString()
+            ),
+
+            StatisticsHeader(PUBGStatsApplication.resourses!!.getString(R.string.stat_txt_other)),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.dBNOs),
+                statisticsData.dBNOs.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.dailyWins),
+                statisticsData.dailyWins.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.boosts),
+                statisticsData.boosts.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.damageDealt),
+                statisticsData.damageDealt.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.days),
+                statisticsData.days.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.heals),
+                statisticsData.heals.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.losses),
+                statisticsData.losses.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.revives),
+                statisticsData.revives.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.rideDistance),
+                statisticsData.rideDistance.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.suicides),
+                statisticsData.suicides.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.vehicleDestroys),
+                statisticsData.vehicleDestroys.toString()
+            ),
+            StatisticsPoints(
+                PUBGStatsApplication.resourses!!.getString(R.string.weaponsAcquired),
+                statisticsData.weaponsAcquired.toString()
+            )
+        )
+        return statistics
+    }
+}

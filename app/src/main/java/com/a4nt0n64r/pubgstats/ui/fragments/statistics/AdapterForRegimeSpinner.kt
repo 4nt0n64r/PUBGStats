@@ -9,8 +9,9 @@ import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
 import kotlinx.android.synthetic.main.spinner_item.view.*
 
-class AdapterForStatSpinner(context: Context, seasons: List<SeasonDB>) :
-    ArrayAdapter<SeasonDB>(context, 0, seasons) {
+class AdapterForRegimeSpinner (context: Context, tpp:String, fpp: String) :
+
+    ArrayAdapter<String>(context, 0, arrayOf(tpp,fpp)) {
 
     fun updateView() {
         notifyDataSetChanged()
@@ -25,14 +26,13 @@ class AdapterForStatSpinner(context: Context, seasons: List<SeasonDB>) :
     }
 
     private fun createView(position: Int, recycledView: View?, parent: ViewGroup): View {
-        val season = getItem(position)
+        val regime = getItem(position)
         val view = recycledView ?: LayoutInflater.from(context).inflate(
             R.layout.spinner_item,
             parent,
             false
         )
-        view.spinner_item_text.text = season.name
+        view.spinner_item_text.text = regime
         return view
     }
 }
-

@@ -1,6 +1,9 @@
 package com.a4nt0n64r.pubgstats.ui.base
 
-import com.a4nt0n64r.pubgstats.domain.model.*
+import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
+import com.a4nt0n64r.pubgstats.domain.model.PlayerUI
+import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
+import com.a4nt0n64r.pubgstats.domain.model.StatisticsItem
 import moxy.MvpView
 import moxy.viewstate.strategy.SingleStateStrategy
 import moxy.viewstate.strategy.SkipStrategy
@@ -21,7 +24,7 @@ interface ActivityView : MvpView {
 @StateStrategyType(SingleStateStrategy::class)
 interface AddPlayerFragmentView : MvpView {
 
-    fun showSnackbar(msg: Int)
+    fun showSnackbar(msg_id: Int)
 
     @StateStrategyType(SkipStrategy::class)
     fun changeFragment()
@@ -53,10 +56,10 @@ interface ListOfPlayersFragmentView : MvpView {
 interface StatisticsFragmentView : MvpView {
 
     fun showStatistics(statistics: List<StatisticsItem>)
-    fun showSeasons(seasons:List<SeasonDB>)
-    fun showPlayerName(player: PlayerDB)
+    fun initiateStatisticsLoading()
+    fun showSeasons(seasons: List<SeasonDB>)
+    fun showPlayerName(name: String)
+    fun showRegimes(tpp: String, fpp: String)
 
-    fun showRegion(region:String)
-    fun showPlatform(platform:String)
 
 }

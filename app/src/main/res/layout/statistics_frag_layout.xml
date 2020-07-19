@@ -1,6 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/stat_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -19,55 +18,46 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+
+            <TextView
+                    android:id="@+id/txt_playerName"
+                    android:text="wat the fuk"
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="@id/stat_header"
+                    app:layout_constraintTop_toTopOf="@id/stat_header"/>
+
+
+            <Spinner
+                    android:id="@+id/regime_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    app:layout_constraintStart_toEndOf="@id/txt_playerName"
+                    app:layout_constraintTop_toTopOf="@id/stat_header"
+                    android:layout_margin="8dp"
+                    android:backgroundTint="@color/color_yellow_background"
+                    android:spinnerMode="dialog"
 
-                <TextView
-                        android:id="@+id/txt_playerName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="@string/stat_txt_title" />
+                    />
 
-                <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:backgroundTint="@color/color_yellow_background"
-                        android:spinnerMode="dialog"
-                        android:textAlignment="center" />
-            </LinearLayout>
 
-            <LinearLayout
+            <Spinner
+                    android:id="@+id/season_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="8dp">
+                    app:layout_constraintEnd_toEndOf="@id/stat_header"
+                    app:layout_constraintTop_toTopOf="@id/stat_header"
+                    android:layout_margin="8dp"
+                    android:backgroundTint="@color/color_yellow_background"
+                    android:spinnerMode="dialog"
 
-                <TextView
-                        android:id="@+id/platform_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/color_yellow_background"
-                        app:layout_constraintTop_toBottomOf="@id/txt_playerName"
-                        tools:text="LoremIpsum..." />
-
-                <TextView
-                        android:id="@+id/region_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/color_yellow_background"
-                        tools:layout_editor_absoluteY="5dp"
-                        tools:text="LoremIpsum..." />
-            </LinearLayout>
+                    />
 
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.recyclerview.widget.RecyclerView

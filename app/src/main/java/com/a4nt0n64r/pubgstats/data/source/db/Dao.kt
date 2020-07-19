@@ -5,9 +5,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.a4nt0n64r.pubgstats.domain.model.SeasonsDownloadDate
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
+import com.a4nt0n64r.pubgstats.domain.model.StatisticsDB
+import java.time.LocalDate
 
 @Dao
 interface Dao {
@@ -16,10 +17,10 @@ interface Dao {
     fun addPlayerToDB(player: PlayerDB)
 
     @Query("SELECT * FROM players_table")
-    fun getPlayersFromDB():List<PlayerDB>
+    fun getPlayersFromDB(): List<PlayerDB>
 
     @Query("DELETE FROM players_table WHERE name_field = :playerName AND id_field = :playerId")
-    fun deletePlayer(playerName: String, playerId:String)
+    fun deletePlayer(playerName: String, playerId: String)
 
     //seasons
 
@@ -30,17 +31,24 @@ interface Dao {
     fun deleteSeasonsFromDB()
 
     @Query("SELECT * FROM seasons_table")
-    fun getSeasonsFromDB():List<SeasonDB>
+    fun getSeasonsFromDB(): List<SeasonDB>
 
-    //date
+    @Query("SELECT dateOfLastDownload_field FROM seasons_table WHERE type_field = 1")
+    fun getLastDownloadDateForSeasons(): LocalDate
+
+
+    //statistics
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDateToDB(dateSeasons: SeasonsDownloadDate)
+    fun addStatisticsToDB(statisticsDB: StatisticsDB)
 
-    @Query("SELECT * from download_table" )
-    fun getDate(): SeasonsDownloadDate?
+    @Query("DELETE FROM statistics_table WHERE id_field =:playerId")
+    fun deleteStatisticsFromDB(playerId: String)
 
-    @Query("DELETE FROM download_table" )
-    fun deleteDate()
+    @Query("SELECT * FROM statistics_table WHERE id_field =:playerId")
+    fun getPlayerStatisticsFromDB(playerId: String): StatisticsDB
+
+    @Query("SELECT lastDownloadStatisticsDate_field FROM statistics_table WHERE id_field =:playerId")
+    fun getLastDownloadDateForStatistics(playerId: String): LocalDate
 
 }

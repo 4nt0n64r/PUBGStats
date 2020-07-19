@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-
 import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.ui.LIST_OF_PLAYERS
 import com.a4nt0n64r.pubgstats.ui.MainActivity
@@ -59,8 +58,8 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
     }
 
     private fun setUpTextViews() {
-        platform_tv.setText(getString(R.string.platform))
-        region_tv.setText(getString(R.string.region))
+        platform_tv.text = getString(R.string.platform)
+        region_tv.text = getString(R.string.region)
     }
 
     private fun setUpSpinners() {
@@ -70,13 +69,13 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
     }
 
     private fun setUpRegions(activity: MainActivity) {
-        val regions = getResources().getStringArray(R.array.region)
+        val regions = resources.getStringArray(R.array.region)
         val regionAdapter = AdapterForSpinner(activity, regions)
         region_spinner.adapter = regionAdapter
     }
 
     private fun setUpPlatforms(activity: MainActivity) {
-        val platforms = getResources().getStringArray(R.array.platform)
+        val platforms = resources.getStringArray(R.array.platform)
         val platformAdapter = AdapterForSpinner(activity, platforms)
         platform_spinner.adapter = platformAdapter
     }
@@ -93,9 +92,13 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
 
     override fun showSnackbar(msg_id: Int) {
         var message = ""
-        when(msg_id){
-            NOT_FOUND -> {message = getString(R.string.err_player_not_found)}
-            EMPTY_NAME -> {message = getString(R.string.err_enter_player_name)}
+        when (msg_id) {
+            NOT_FOUND -> {
+                message = getString(R.string.err_player_not_found)
+            }
+            EMPTY_NAME -> {
+                message = getString(R.string.err_enter_player_name)
+            }
         }
         val snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG)
         val snackView = snackbar.view

@@ -1,7 +1,6 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.statistics
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,8 +54,6 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         setOnNavigationItemListener()
 
         presenter.setSeasons()
-        //крашится т.к. статка запрашивается одновременно с сезонами
-        //presenter.setStatistics()
     }
 
     private fun getParametersFromBundle() {
@@ -70,10 +67,16 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
     }
 
     private fun setParametersInPresenter() {
-        presenter.setParameters(
-            PlayerDB(nameOfPlayer, playerId, playerRegion, playerPlatform),
+        presenter.setPlayerParameters(
+            PlayerDB(nameOfPlayer, playerId, playerRegion, playerPlatform)
+        )
+        presenter.setSeasonParameters(
             getString(R.string.prev_season),
             getString(R.string.current_season)
+        )
+        presenter.setRegimeParameters(
+            getString(R.string.tpp),
+            getString(R.string.fpp)
         )
     }
 
@@ -82,13 +85,34 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.navigation_solo -> {
-                        presenter.setStatistics()
+                        when (regime_spinner.selectedItem.toString()) {
+                            getString(R.string.tpp) -> {
+                                presenter.setSoloTpp()
+                            }
+                            getString(R.string.fpp) -> {
+                                presenter.setSoloFpp()
+                            }
+                        }
                     }
                     R.id.navigation_duo -> {
-                        presenter.setStatistics()
+                        when (regime_spinner.selectedItem.toString()) {
+                            getString(R.string.tpp) -> {
+                                presenter.setDuoTpp()
+                            }
+                            getString(R.string.fpp) -> {
+                                presenter.setDuoFpp()
+                            }
+                        }
                     }
                     R.id.navigation_squad -> {
-                        presenter.setStatistics()
+                        when (regime_spinner.selectedItem.toString()) {
+                            getString(R.string.tpp) -> {
+                                presenter.setSquadTpp()
+                            }
+                            getString(R.string.fpp) -> {
+                                presenter.setSquadFpp()
+                            }
+                        }
                     }
                 }
                 return@OnNavigationItemSelectedListener true
@@ -97,8 +121,9 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 
-    override fun showPlayerName(player: PlayerDB) {
-        txt_playerName.text = player.name
+    //баг, не исполняется функция
+    override fun showPlayerName(name: String) {
+        txt_playerName.text = name
     }
 
     override fun showStatistics(statistics: List<StatisticsItem>) {
@@ -106,19 +131,19 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
     }
 
     override fun showSeasons(seasons: List<SeasonDB>) {
-        val spAdapter = AdapterForStatSpinner(context!!, seasons)
-        spinner.adapter = spAdapter
+        val spAdapter = AdapterForSeasonsSpinner(context!!, seasons)
+        season_spinner.adapter = spAdapter
         spAdapter.updateView()
     }
 
-    override fun showRegion(region: String) {
-        region_tv.text = region
-        Log.d("BUG", region)
+    override fun showRegimes(tpp: String, fpp: String) {
+        val spAdapter = AdapterForRegimeSpinner(context!!, tpp, fpp)
+        regime_spinner.adapter = spAdapter
+        spAdapter.updateView()
     }
 
-    override fun showPlatform(platform: String) {
-        platform_tv.text = platform
-        Log.d("BUG", platform)
+    override fun initiateStatisticsLoading(){
+        presenter.setStatistics()
     }
 }
 

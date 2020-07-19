@@ -73,9 +73,7 @@ data class StatData(
 
 
 //интерфейс используется в адаптере для RV
-interface StatisticsItem {
-
-}
+interface StatisticsItem
 
 data class StatisticsHeader(
     val text:String

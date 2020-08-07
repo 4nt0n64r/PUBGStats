@@ -45,6 +45,10 @@ class LocalRepositoryImpl(private val dao: Dao) : LocalRepository {
         return dao.getPlayerStatisticsFromDB(player.id)
     }
 
+    override suspend fun getLastDownloadStatisticsDate(playerId:String): LocalDate {
+        return dao.getLastDownloadDateForStatistics(playerId)
+    }
+
     override suspend fun deleteStatisticsForPlayer(player: PlayerDB) {
         dao.deleteStatisticsFromDB(player.id)
     }

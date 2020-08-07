@@ -3,7 +3,8 @@
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_main_background">
+        android:background="@color/color_main_background"
+        android:visibility="visible">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,44 +22,43 @@
 
             <TextView
                     android:id="@+id/txt_playerName"
-                    android:text="wat the fuk"
                     style="@style/Base.TextAppearance.AppCompat.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="8dp"
                     android:textColor="@color/white"
+                    android:textSize="24sp"
                     app:layout_constraintStart_toStartOf="@id/stat_header"
-                    app:layout_constraintTop_toTopOf="@id/stat_header"/>
+                    app:layout_constraintTop_toTopOf="@id/stat_header" />
 
 
             <Spinner
                     android:id="@+id/regime_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:backgroundTint="@color/color_yellow_background"
+                    android:spinnerMode="dialog"
                     app:layout_constraintStart_toEndOf="@id/txt_playerName"
                     app:layout_constraintTop_toTopOf="@id/stat_header"
-                    android:layout_margin="8dp"
-                    android:backgroundTint="@color/color_yellow_background"
-                    android:spinnerMode="dialog"
 
                     />
 
 
-            <Spinner
-                    android:id="@+id/season_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="@id/stat_header"
-                    app:layout_constraintTop_toTopOf="@id/stat_header"
-                    android:layout_margin="8dp"
-                    android:backgroundTint="@color/color_yellow_background"
-                    android:spinnerMode="dialog"
+            <!--            <Spinner-->
+            <!--                    android:id="@+id/season_spinner"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    app:layout_constraintEnd_toEndOf="@id/stat_header"-->
+            <!--                    app:layout_constraintTop_toTopOf="@id/stat_header"-->
+            <!--                    android:layout_margin="8dp"-->
+            <!--                    android:backgroundTint="@color/color_yellow_background"-->
+            <!--                    android:spinnerMode="dialog"-->
 
-                    />
+            <!--                    />-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/stat_data_rv"
@@ -73,6 +73,7 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/navigation"
                 android:layout_width="match_parent"
@@ -86,4 +87,22 @@
                 app:menu="@menu/navigation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+            android:id="@+id/loading_screen_statistics"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+        <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:indeterminateDrawable="@drawable/spinner_ring"
+                android:indeterminateOnly="true"
+                android:visibility="visible" />
+    </LinearLayout>
 </FrameLayout>

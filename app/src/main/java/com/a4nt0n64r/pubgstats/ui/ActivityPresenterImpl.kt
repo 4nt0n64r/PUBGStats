@@ -8,8 +8,12 @@ import moxy.InjectViewState
 class ActivityPresenterImpl(
 ) : AbstractActivityPresenter() {
 
-    override fun loadFragment(fragmentId:Int) {
-        viewState.drawFragment(fragmentId)
+    override fun loadAddPlayerFragment() {
+        viewState.drawAddPlayerFragment()
+    }
+
+    override fun loadListOfPlayersFragment() {
+        viewState.drawListOfPlayersFragment()
     }
 
 }

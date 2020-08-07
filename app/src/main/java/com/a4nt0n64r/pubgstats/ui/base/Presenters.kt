@@ -5,14 +5,14 @@ import moxy.MvpPresenter
 
 interface ActivityPresenter {
 
-    fun loadFragment(fragmentId: Int)
+    fun loadAddPlayerFragment()
+    fun loadListOfPlayersFragment()
     fun onDestroy()
 }
 
-
 interface AddPlayerPresenter {
 
-    fun requestPlayer(name: String?, region: String, platform: String)
+    fun requestPlayer(name: String?, region: String, platform: String, isConnected: Boolean)
     fun onDestroy()
 }
 
@@ -20,7 +20,7 @@ interface ListOfPlayersPresenter {
 
     fun requestPlayersFromDB()
     fun deleteSelectedPlayers()
-    fun onPlayerTouched(position: Int)
+    fun onPlayerTouched(position: Int, isConnected: Boolean)
     fun onPlayerPressed(position: Int)
 
     fun letsAddNewPlayer()

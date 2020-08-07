@@ -1,6 +1,8 @@
 package com.a4nt0n64r.pubgstats.ui
 
 import android.Manifest
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import com.a4nt0n64r.pubgstats.R
@@ -20,8 +22,14 @@ import org.koin.core.get
 const val ADD_PLAYER = 0
 const val STATISTICS = 1
 const val LIST_OF_PLAYERS = 2
+const val ERROR = 3
+
 const val FRAGMENT_CHANGED = "fragment_changed"
-const val ADD_TO_BACKSTACK = "backstack"
+
+const val ADD_PLAYER_BACKSTACK = "add"
+const val STATISTICS_BACKSTACK = "stat"
+const val LIST_OF_PLAYERS_BACKSTACK = "list"
+const val ERROR_BACKSTACK = "err"
 
 const val NAME = "name"
 const val ID = "id"
@@ -31,9 +39,12 @@ const val PLATFORM = "platform"
 const val REQUEST_PERMISSION_CODE = 0
 
 
-class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
+class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent,
+    ConnectivityReceiver.ConnectivityReceiverListener {
 
     private val TAG = "MainActivity"
+
+    var connectionAvailabile: Boolean = true
 
     @InjectPresenter
     lateinit var presenter: AbstractActivityPresenter
@@ -44,26 +55,27 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        registerReceiver(
+            ConnectivityReceiver(),
+            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        )
 
-        presenter.loadFragment(LIST_OF_PLAYERS)
+        presenter.loadListOfPlayersFragment()
 
     }
 
     // TODO("добавить колбэк что фрагментов не осталось и вырубить приложение")
     // TODO("когда поворачиваем экран он откатывает фрагмент статки на меню")
-    // Метод popBackStack() удаляет транзакцию с верхушки бэкстэка, возвращает true,
-    // если бэкстэк хранил хотя бы одну транзакцию.
-    // TODO(пермишшены!)
+    //это происходит из-за того что активность пересоздается в момент поворта и выполняется onCreate()
+    //возможно надо чекать какой фрагмент показывается и сохранять в бандл всё для восстановления
+    // https://stackoverflow.com/questions/9294603/how-do-i-get-the-currently-displayed-fragment
 
-    override fun drawFragment(fragmentId: Int) {
-        when (fragmentId) {
-            ADD_PLAYER -> {
-                displayAddPlayerFragment()
-            }
-            LIST_OF_PLAYERS -> {
-                displayListOfPlayersFragment()
-            }
-        }
+    override fun drawAddPlayerFragment() {
+        displayAddPlayerFragment()
+    }
+
+    override fun drawListOfPlayersFragment() {
+        displayListOfPlayersFragment()
     }
 
     private fun displayListOfPlayersFragment() {
@@ -73,7 +85,6 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
                 R.id.frame,
                 ListOfPlayersFragment(), FRAGMENT_CHANGED
             )
-            .addToBackStack(ADD_TO_BACKSTACK)
             .commit()
     }
 
@@ -84,7 +95,7 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
                 R.id.frame,
                 AddPlayerFragment(), FRAGMENT_CHANGED
             )
-            .addToBackStack(ADD_TO_BACKSTACK)
+            .addToBackStack(ADD_PLAYER_BACKSTACK)
             .commit()
     }
 
@@ -95,12 +106,11 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
                 R.id.frame,
                 fragment, FRAGMENT_CHANGED
             )
-            .addToBackStack(ADD_TO_BACKSTACK)
+            .addToBackStack(STATISTICS_BACKSTACK)
             .commit()
     }
 
     override fun showStatisticsFragmet(player: PlayerDB) {
-
 
         //TODO("переработать чтобы код выглядел лучше")
         val statisticsFragment = StatisticsFragment()
@@ -108,12 +118,11 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
         val bundle = Bundle()
         bundle.putString(NAME, player.name)
         bundle.putString(ID, player.id)
-        bundle.putString(PLATFORM,player.platform)
-        bundle.putString(REGION,player.region)
-        
+        bundle.putString(PLATFORM, player.platform)
+        bundle.putString(REGION, player.region)
+
         statisticsFragment.arguments = bundle
 
-        //Нужно передать аргументы
         displayStatisticsFragment(statisticsFragment)
     }
 
@@ -137,13 +146,20 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent {
         )
     }
 
+    override fun onResume() {
+        super.onResume()
 
-    //Вызываем у ActivityPresenter метод onDestroy, чтобы избежать утечек контекста и прочих неприятностей.
+        ConnectivityReceiver.connectivityReceiverListener = this
+    }
+
     public override fun onDestroy() {
         super.onDestroy()
         presenter.onDestroy()
     }
 
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        connectionAvailabile = isConnected
+    }
 }
 
 

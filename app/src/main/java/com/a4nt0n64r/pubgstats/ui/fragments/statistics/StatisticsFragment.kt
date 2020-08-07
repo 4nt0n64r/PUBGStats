@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
-import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
 import com.a4nt0n64r.pubgstats.domain.model.StatisticsItem
-import com.a4nt0n64r.pubgstats.ui.ID
-import com.a4nt0n64r.pubgstats.ui.NAME
-import com.a4nt0n64r.pubgstats.ui.PLATFORM
-import com.a4nt0n64r.pubgstats.ui.REGION
+import com.a4nt0n64r.pubgstats.ui.*
 import com.a4nt0n64r.pubgstats.ui.base.AbstractStatisticsPresenter
 import com.a4nt0n64r.pubgstats.ui.base.StatisticsFragmentView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.add_player_frag_layout.*
 import kotlinx.android.synthetic.main.statistics_frag_layout.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -51,10 +49,13 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
 
         getParametersFromBundle()
         setParametersInPresenter()
+        showPlayerName(nameOfPlayer)
         setOnNavigationItemListener()
 
         presenter.setSeasons()
+
     }
+
 
     private fun getParametersFromBundle() {
         val bundle = this.arguments
@@ -79,6 +80,7 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
             getString(R.string.fpp)
         )
     }
+
 
     private fun setOnNavigationItemListener() {
         val onNavigationItemSelectedListener =
@@ -121,7 +123,6 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 
-    //баг, не исполняется функция
     override fun showPlayerName(name: String) {
         txt_playerName.text = name
     }
@@ -130,11 +131,12 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         rvAdapter.setData(statistics)
     }
 
-    override fun showSeasons(seasons: List<SeasonDB>) {
-        val spAdapter = AdapterForSeasonsSpinner(context!!, seasons)
-        season_spinner.adapter = spAdapter
-        spAdapter.updateView()
-    }
+    //код оставлен для следующего патча
+//    override fun showSeasons(seasons: List<SeasonDB>) {
+//        val spAdapter = AdapterForSeasonsSpinner(context!!, seasons)
+//        season_spinner.adapter = spAdapter
+//        spAdapter.updateView()
+//    }
 
     override fun showRegimes(tpp: String, fpp: String) {
         val spAdapter = AdapterForRegimeSpinner(context!!, tpp, fpp)
@@ -142,8 +144,41 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         spAdapter.updateView()
     }
 
-    override fun initiateStatisticsLoading(){
+    //переделать слушателя на спиннере
+    override fun initiateStatisticsLoading() {
         presenter.setStatistics()
+        setSpinnerOnItemSelectedListener()
+    }
+
+    private fun setSpinnerOnItemSelectedListener() {
+        regime_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (regime_spinner.selectedItem.toString()) {
+                    getString(R.string.tpp) -> {
+                        navigation.setSelectedItemId(R.id.navigation_solo)
+                    }
+                    getString(R.string.fpp) -> {
+                        navigation.setSelectedItemId(R.id.navigation_solo)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun showLoading() {
+        loading_screen_statistics.visibility = View.VISIBLE
+    }
+
+    override fun hideLoading() {
+        loading_screen_statistics.visibility = View.INVISIBLE
     }
 }
 

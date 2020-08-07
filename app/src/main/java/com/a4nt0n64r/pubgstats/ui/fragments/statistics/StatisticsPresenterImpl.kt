@@ -32,10 +32,8 @@ class StatisticsPresenterImpl(
 
     private val job: Job by lazy { SupervisorJob() }
 
-    //Не работает функция!
     override fun setPlayerParameters(player: PlayerDB) {
         this.player = player
-        viewState.showPlayerName(this.player.name)
     }
 
     override fun setSeasonParameters(prevSeason: String, currentSeason: String) {
@@ -55,6 +53,8 @@ class StatisticsPresenterImpl(
                 shouldDownloadNewSeasons()
             }
 
+            viewState.showLoading()
+
             seasons = withContext(Dispatchers.IO) {
                 if (shouldDownloadNewSeasons) {
                     localRepository.deleteSeasonsFromDB()
@@ -63,7 +63,9 @@ class StatisticsPresenterImpl(
                     localRepository.getAllSeasonsFromDB()
                 }
             }
-            viewState.showSeasons(seasons)
+
+            viewState.hideLoading()
+
             viewState.initiateStatisticsLoading()
         }
     }
@@ -71,6 +73,7 @@ class StatisticsPresenterImpl(
     @WorkerThread
     private suspend fun getNewSeasons(): List<SeasonDB> {
         try {
+
             val dataFromApi = networkRepository.getNetSeasons()
             val previousSeasonApi =
                 dataFromApi!!.seasons[dataFromApi.seasons.size - 2]
@@ -85,6 +88,7 @@ class StatisticsPresenterImpl(
             localRepository.addSeasonToDB(previousSeasonDB)
 
             return localRepository.getAllSeasonsFromDB()
+
         } catch (e: NullPointerException) {
             Log.d("ERROR", "No data (seasons)")
             return emptyList()
@@ -100,7 +104,7 @@ class StatisticsPresenterImpl(
         if (lastDownloadDate != null) {
             Log.d(
                 "INFO",
-                "For seasons updating left ${ChronoUnit.DAYS.between(lastDownloadDate, todayDate)}"
+                "For seasons updating left ${30 - ChronoUnit.DAYS.between(lastDownloadDate, todayDate)} days"
             )
             return ChronoUnit.DAYS.between(lastDownloadDate, todayDate) >= 30
         } else return true
@@ -111,6 +115,9 @@ class StatisticsPresenterImpl(
             val shouldDownloadStatistics = withContext(Dispatchers.IO) {
                 shouldDownloadStatistics()
             }
+            withContext(Dispatchers.Main) {
+                viewState.showLoading()
+            }
 
             statistics = withContext(Dispatchers.IO) {
                 if (shouldDownloadStatistics) {
@@ -119,6 +126,9 @@ class StatisticsPresenterImpl(
                 } else {
                     localRepository.getStatisticsForPlayer(player)
                 }
+            }
+            withContext(Dispatchers.Main) {
+                viewState.hideLoading()
             }
             withContext(Dispatchers.Main) {
                 viewState.showStatistics(statisticsToListConverter(statistics.soloTpp))
@@ -141,14 +151,21 @@ class StatisticsPresenterImpl(
             statisticsFromApi.data.seasonAttributes.gameModeStats.squad,
             LocalDate.now()
         )
-
         return statisticsDB
-
     }
 
     override suspend fun shouldDownloadStatistics(): Boolean {
-        //переделать
-        return true
+        val lastDownload = localRepository.getLastDownloadStatisticsDate(player.id)
+        if (lastDownload != null){
+            val todayDate = LocalDate.now()
+            Log.d(
+                "INFO",
+                "For statistics for ${player.name} updating left ${ChronoUnit.DAYS.between(lastDownload, todayDate)}"
+            )
+            return ChronoUnit.DAYS.between(lastDownload, todayDate) >= 1
+        }else{
+            return true
+        }
     }
 
     override fun setSoloTpp() {

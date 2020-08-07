@@ -7,6 +7,7 @@ import com.a4nt0n64r.pubgstats.network.NetworkRepository
 import com.a4nt0n64r.pubgstats.ui.base.AbstractAddPlayerPresenter
 import kotlinx.coroutines.*
 import moxy.InjectViewState
+import retrofit2.HttpException
 
 @InjectViewState
 class AddPlayerPresenterImpl(
@@ -16,11 +17,22 @@ class AddPlayerPresenterImpl(
 
     private val job: Job by lazy { SupervisorJob() }
 
-    override fun requestPlayer(name: String?, region: String, platform: String) {
-        if (name == "") {
-            viewState.showSnackbar(EMPTY_NAME)
+
+    override fun requestPlayer(
+        name: String?,
+        region: String,
+        platform: String,
+        isConnected: Boolean
+    ) {
+        if (isConnected) {
+            viewState.showLoading()
+            if (name == "") {
+                viewState.showSnackbar(EMPTY_NAME)
+            } else {
+                getPlayerFromApi(name!!, region, platform)
+            }
         } else {
-            getPlayerFromApi(name!!, region, platform)
+            viewState.showSnackbar(NO_INTERNET)
         }
     }
 
@@ -38,9 +50,14 @@ class AddPlayerPresenterImpl(
                         platform
                     )
                 )
+                viewState.hideLoading()
                 viewState.changeFragment()
             } catch (e: NullPointerException) {
+                viewState.hideLoading()
                 viewState.showSnackbar(NOT_FOUND)
+            } catch (e: HttpException) {
+                viewState.hideLoading()
+                viewState.showSnackbar(NO_INTERNET)
             }
         }
     }

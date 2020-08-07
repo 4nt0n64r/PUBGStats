@@ -1,15 +1,12 @@
 <resources>
 
-    <string name="app_name" translatable="false">PUBG Stats</string>
+    <string name="app_name" translatable="false">PUBG Skills</string>
     <string name="title_solo" translatable="false">Solo</string>
     <string name="title_duo" translatable="false">Duo</string>
     <string name="title_squard" translatable="false">Squad</string>
-    <string name="begin_btn">find</string>
+    <string name="begin_btn">Find</string>
     <string name="begin_txt_title">Welcome</string>
-    <string name="begin_txt_hint">player name</string>
-    <string name="begin_txt_description">To continue, enter the player name to collect server statistics. Thank you in
-        advance
-    </string>
+
     <string name="item_txt_name" translatable="false">PLAYER123</string>
     <string name="list_txt_title">Choose player</string>
     <string name="stat_txt_title" translatable="false">PlayerName</string>
@@ -27,9 +24,7 @@
     <string name="squad_fpp" translatable="false">squad-fpp</string>
 
     <!-- errors-->
-    <string name="err_empty_players">Oops! It seems you have not added a player to view statistics. Please go and enter
-        your nickname to get data.
-    </string>
+    <string name="err_empty_players">You have not yet added players to view statistics. To add press \"+\".</string>
     <string name="err_no_internet">Your internet connection is not stable. Reconnect to network to continue.</string>
     <string name="err_enter_player_name">Please enter name.</string>
     <string name="err_player_not_found">Player not found.</string>
@@ -80,36 +75,58 @@
     <string name="loading">Loading</string>
     <string name="platform">Platform</string>
     <string name="region">Region</string>
-    <string name="tpp" translatable="false">tpp</string>
-    <string name="fpp" translatable="false">fpp</string>
+    <string name="tpp" translatable="false">TPP</string>
+    <string name="fpp" translatable="false">FPP</string>
 
     <string-array name="platform">
-        <item name="steam" translatable="false">steam</item>
-        <item name="kakao" translatable="false">kakao</item>
-        <item name="psn" translatable="false">psn</item>
-        <item name="xbox" translatable="false">xbox</item>
+        <item name="steam" translatable="false">Steam</item>
+        <item name="psn" translatable="false">Play Station</item>
+        <item name="xbox" translatable="false">Xbox</item>
     </string-array>
 
-    <string-array name="region">
-        <item name="pc-ru" translatable="false">pc-ru</item>  <!--Russia-->
-        <item name="pc-as" translatable="false">pc-as</item>  <!--Asia-->
-        <item name="pc-eu" translatable="false">pc-eu</item>  <!--Europe-->
-        <item name="pc-jp" translatable="false">pc-jp</item>  <!--Japan-->
-        <item name="pc-kakao" translatable="false">pc-kakao</item>  <!--Kakao-->
-        <item name="pc-krjp" translatable="false">pc-krjp</item>  <!--Korea-->
-        <item name="pc-na" translatable="false">pc-na</item>  <!--North America-->
-        <item name="pc-oc" translatable="false">pc-oc</item>  <!--Oceania-->
-        <item name="pc-sa" translatable="false">pc-sa</item>  <!--South and Central America-->
-        <item name="pc-sea" translatable="false">pc-sea</item>  <!--South East Asia-->
-        <item name="psn-as" translatable="false">psn-as</item>  <!--Asia-->
-        <item name="psn-eu" translatable="false">psn-eu</item>  <!--Europe-->
-        <item name="psn-na" translatable="false">psn-na</item>  <!--North America-->
-        <item name="psn-oc" translatable="false">psn-oc</item>  <!--Oceania-->
-        <item name="xbox-as" translatable="false">xbox-as</item>  <!--Asia-->
-        <item name="xbox-eu" translatable="false">xbox-eu</item>  <!--Europe-->
-        <item name="xbox-na" translatable="false">xbox-na</item>  <!--North America-->
-        <item name="xbox-oc" translatable="false">xbox-oc</item>  <!--Oceania-->
-        <item name="xbox-sa" translatable="false">xbox-sa</item>  <!--South America-->
+    <string name="steam" translatable="false">Steam</string>
+    <string name="psn" translatable="false">Play Station</string>
+    <string name="xbox" translatable="false">Xbox</string>
+
+    <string-array name="region_psn">
+        <item name="psn-eu" translatable="false">Europe</item>  <!--Europe-->
+        <item name="psn-as" translatable="false">Asia</item>  <!--Asia-->
+        <item name="psn-na" translatable="false">North America</item>  <!--North America-->
+        <item name="psn-oc" translatable="false">Oceania</item>  <!--Oceania-->
     </string-array>
+
+    <string-array name="region_xbox">
+        <item name="xbox-eu" translatable="false">Europe</item>  <!--Europe-->
+        <item name="xbox-as" translatable="false">Asia</item>  <!--Asia-->
+        <item name="xbox-na" translatable="false">North America</item>  <!--North America-->
+        <item name="xbox-sa" translatable="false">South America</item>  <!--South America-->
+        <item name="xbox-oc" translatable="false">Oceania</item>  <!--Oceania-->
+    </string-array>
+
+    <string-array name="region_pc">
+        <item name="pc-eu" translatable="false">Europe</item>  <!--Europe-->
+        <item name="pc-as" translatable="false">Asia</item>  <!--Asia-->
+        <item name="pc-sea" translatable="false">South East Asia</item>  <!--South East Asia-->
+        <item name="pc-ru" translatable="false">Russia</item>  <!--Russia-->
+        <item name="pc-jp" translatable="false">Japan</item>  <!--Japan-->
+        <item name="pc-krjp" translatable="false">Korea</item>  <!--Korea-->
+        <item name="pc-na" translatable="false">North America</item>  <!--North America-->
+        <item name="pc-sa" translatable="false">South America</item>  <!--South and Central America-->
+        <item name="pc-oc" translatable="false">Oceania</item>  <!--Oceania-->
+
+    </string-array>
+
+    <string name="no_internet_connection">No Internet connection</string>
+    <string name="begin_txt_hint">Enter nickname</string>
+
+    <string name="russia" translatable="false">Russia</string>
+    <string name="asia" translatable="false">Asia</string>
+    <string name="europe" translatable="false">Europe</string>
+    <string name="japan" translatable="false">Japan</string>
+    <string name="korea" translatable="false">Korea</string>
+    <string name="north_america" translatable="false">North America</string>
+    <string name="oceania" translatable="false">Oceania</string>
+    <string name="south_america" translatable="false">South America</string>
+    <string name="south_east_asia" translatable="false">South East Asia</string>
 
 </resources>

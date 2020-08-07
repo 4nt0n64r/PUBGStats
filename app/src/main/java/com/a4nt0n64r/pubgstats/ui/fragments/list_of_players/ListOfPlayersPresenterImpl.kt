@@ -1,10 +1,12 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.list_of_players
 
+import android.util.Log
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.model.PlayerUI
 import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
 import com.a4nt0n64r.pubgstats.ui.ADD_PLAYER
 import com.a4nt0n64r.pubgstats.ui.base.AbstractListOfPlayersPresenter
+import com.a4nt0n64r.pubgstats.ui.fragments.add_player.NO_INTERNET
 import kotlinx.coroutines.*
 import moxy.InjectViewState
 
@@ -38,24 +40,27 @@ class ListOfPlayersPresenterImpl(
                 listOfPlayers.await()
                     .map { PlayerUI(it.name, it.id, it.region, it.platform, false) }
             withContext(Dispatchers.Main) {
-                if (listOfPlayersUI.isNullOrEmpty()){
+                if (listOfPlayersUI.isNullOrEmpty()) {
                     viewState.showErrorTextAndImage()
-                }else{
+                } else {
                     viewState.hideErrorTextAndImage()
                     viewState.showPlayers(listOfPlayersUI)
                 }
-
             }
         }
     }
 
-    override fun onPlayerTouched(position: Int) {
-        CoroutineScope(Dispatchers.Main + job).launch {
-            withContext(Dispatchers.Main) {
-                val listOfPlayersInRV =
-                    listOfPlayersUI.map { PlayerDB(it.name, it.id, it.region, it.platform) }
-                viewState.showPlayerStatistics(listOfPlayersInRV[position])
+    override fun onPlayerTouched(position: Int, isConnected: Boolean) {
+        if (isConnected){
+            CoroutineScope(Dispatchers.Main + job).launch {
+                withContext(Dispatchers.Main) {
+                    val listOfPlayersInRV =
+                        listOfPlayersUI.map { PlayerDB(it.name, it.id, it.region, it.platform) }
+                    viewState.showPlayerStatistics(listOfPlayersInRV[position])
+                }
             }
+        }else{
+            viewState.showSnackbar(NO_INTERNET)
         }
     }
 
@@ -71,6 +76,7 @@ class ListOfPlayersPresenterImpl(
                 minusButtonIsShown = true
             } else {
                 viewState.hideMinusButton()
+                viewState.selectionModeOff()
                 minusButtonIsShown = false
             }
         }

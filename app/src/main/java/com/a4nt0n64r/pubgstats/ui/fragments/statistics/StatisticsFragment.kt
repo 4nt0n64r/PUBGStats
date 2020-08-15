@@ -81,7 +81,6 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         )
     }
 
-
     private fun setOnNavigationItemListener() {
         val onNavigationItemSelectedListener =
             BottomNavigationView.OnNavigationItemSelectedListener { item ->

@@ -92,6 +92,7 @@
             android:id="@+id/loading_screen_statistics"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:alpha="128"
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="invisible">

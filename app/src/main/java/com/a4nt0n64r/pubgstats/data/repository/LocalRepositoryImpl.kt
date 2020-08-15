@@ -52,4 +52,8 @@ class LocalRepositoryImpl(private val dao: Dao) : LocalRepository {
     override suspend fun deleteStatisticsForPlayer(player: PlayerDB) {
         dao.deleteStatisticsFromDB(player.id)
     }
+
+    override suspend fun getRegionForPlayerStatistics(playerId: String): String {
+        return dao.getRegionForPlayerFromStatistics(playerId)
+    }
 }

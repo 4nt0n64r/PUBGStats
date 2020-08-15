@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -15,6 +16,14 @@ import com.a4nt0n64r.pubgstats.ui.base.AbstractAddPlayerPresenter
 import com.a4nt0n64r.pubgstats.ui.base.AddPlayerFragmentView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.add_player_frag_layout.*
+import kotlinx.android.synthetic.main.add_player_frag_layout.btn_find
+import kotlinx.android.synthetic.main.add_player_frag_layout.input_login
+import kotlinx.android.synthetic.main.add_player_frag_layout.loading_screen_addplayer
+import kotlinx.android.synthetic.main.add_player_frag_layout.platform_spinner
+import kotlinx.android.synthetic.main.add_player_frag_layout.platform_tv
+import kotlinx.android.synthetic.main.add_player_frag_layout.region_spinner
+import kotlinx.android.synthetic.main.add_player_frag_layout.region_tv
+import kotlinx.android.synthetic.main.add_player_frag_relative.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -34,11 +43,16 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
     @ProvidePresenter
     fun provide(): AbstractAddPlayerPresenter = get()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getActivity()?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.add_player_frag_layout, container, false)
+        return inflater.inflate(R.layout.add_player_frag_relative, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,12 +65,13 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
         setUpSpinners()
 
         btn_find.setOnClickListener {
+            val playerName = input_login.text.toString().replace(" ", "")
             when (platform_spinner.selectedItem) {
                 "Steam" -> {
                     when (region_spinner.selectedItem) {
                         getString(R.string.europe) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "pc-eu",
                                 "steam",
                                 checkConnection()
@@ -64,7 +79,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.asia) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "pc-as",
                                 "steam",
                                 checkConnection()
@@ -72,7 +87,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.south_east_asia) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "pc-sea",
                                 "steam",
                                 checkConnection()
@@ -80,7 +95,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.russia) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "pc-ru",
                                 "steam",
                                 checkConnection()
@@ -88,7 +103,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.japan) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "pc-jp",
                                 "steam",
                                 checkConnection()
@@ -96,7 +111,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.korea) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "pc-krjp",
                                 "steam",
                                 checkConnection()
@@ -104,7 +119,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.north_america) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "pc-na",
                                 "steam",
                                 checkConnection()
@@ -112,7 +127,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.south_america) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "pc-sa",
                                 "steam",
                                 checkConnection()
@@ -120,7 +135,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.oceania) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "pc-oc",
                                 "steam",
                                 checkConnection()
@@ -132,7 +147,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                     when (region_spinner.selectedItem) {
                         getString(R.string.europe) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "psn-eu",
                                 "steam",
                                 checkConnection()
@@ -140,7 +155,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.asia) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "psn-as",
                                 "steam",
                                 checkConnection()
@@ -148,7 +163,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.north_america) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "psn-na",
                                 "steam",
                                 checkConnection()
@@ -156,7 +171,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.oceania) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "psn-oc",
                                 "steam",
                                 checkConnection()
@@ -168,7 +183,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                     when (region_spinner.selectedItem) {
                         getString(R.string.europe) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "xbox-eu",
                                 "steam",
                                 checkConnection()
@@ -176,7 +191,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.asia) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "xbox-as",
                                 "steam",
                                 checkConnection()
@@ -184,7 +199,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.north_america) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "xbox-na",
                                 "steam",
                                 checkConnection()
@@ -192,7 +207,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.south_america) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "xbox-sa",
                                 "steam",
                                 checkConnection()
@@ -200,7 +215,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                         }
                         getString(R.string.oceania) -> {
                             presenter.requestPlayer(
-                                input_login.text.toString(),
+                                playerName,
                                 "xbox-oc",
                                 "steam",
                                 checkConnection()
@@ -274,7 +289,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                 message = getString(R.string.no_internet_connection)
             }
         }
-        val snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG)
+        val snackbar = Snackbar.make(sv, message, Snackbar.LENGTH_LONG)
         val snackView = snackbar.view
         snackView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
         val tv = snackView.findViewById<TextView>(R.id.snackbar_text)

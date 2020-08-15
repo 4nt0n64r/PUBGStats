@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
@@ -16,7 +16,8 @@
     </style>
 
     <style name="exampleCursor" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
-        <item name="colorControlActivated">@color/design_default_color_primary_dark</item>
+        <item name="colorControlActivated">@color/color_yellow_background</item>
+
     </style>
 
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -26,11 +27,10 @@
         <item name="hintTextColor">@color/color_yellow_background</item>
         <item name="boxStrokeColor">@color/color_gray_background</item>
         <item name="boxStrokeWidth">1dp</item>
+        <item name="colorControlActivated">@color/color_yellow_background</item>
         <item name="errorEnabled">true</item>
         <item name="counterEnabled">false</item>
         <item name="android:theme">@style/exampleCursor</item>
     </style>
-
-
 
 </resources>

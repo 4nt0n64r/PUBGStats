@@ -51,4 +51,7 @@ interface Dao {
     @Query("SELECT lastDownloadStatisticsDate_field FROM statistics_table WHERE id_field =:playerId")
     fun getLastDownloadDateForStatistics(playerId: String): LocalDate
 
+    @Query("SELECT region_field FROM statistics_table WHERE id_field =:playerId")
+    fun getRegionForPlayerFromStatistics(playerId: String):String
+
 }

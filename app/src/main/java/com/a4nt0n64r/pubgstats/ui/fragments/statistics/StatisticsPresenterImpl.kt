@@ -143,7 +143,8 @@ class StatisticsPresenterImpl(
         val statisticsFromApi = networkRepository.getNetStatistics(player, seasons[0])
 
         val statisticsDB = StatisticsDB(
-            player.id, statisticsFromApi.data.seasonAttributes.gameModeStats.solo_fpp,
+            player.id, player.region,
+            statisticsFromApi.data.seasonAttributes.gameModeStats.solo_fpp,
             statisticsFromApi.data.seasonAttributes.gameModeStats.duo_fpp,
             statisticsFromApi.data.seasonAttributes.gameModeStats.squad_fpp,
             statisticsFromApi.data.seasonAttributes.gameModeStats.solo,
@@ -156,14 +157,20 @@ class StatisticsPresenterImpl(
 
     override suspend fun shouldDownloadStatistics(): Boolean {
         val lastDownload = localRepository.getLastDownloadStatisticsDate(player.id)
-        if (lastDownload != null){
-            val todayDate = LocalDate.now()
-            Log.d(
-                "INFO",
-                "For statistics for ${player.name} updating left ${ChronoUnit.DAYS.between(lastDownload, todayDate)}"
-            )
-            return ChronoUnit.DAYS.between(lastDownload, todayDate) >= 1
-        }else{
+        val statRegion = localRepository.getRegionForPlayerStatistics(player.id)
+        if (statRegion == player.region){
+            if (lastDownload != null){
+                val todayDate = LocalDate.now()
+                Log.d(
+                    "INFO",
+                    "For statistics for ${player.name} updating left ${ChronoUnit.DAYS.between(lastDownload, todayDate)}"
+                )
+                return ChronoUnit.DAYS.between(lastDownload, todayDate) >= 1
+            }else{
+                return true
+            }
+        }
+        else{
             return true
         }
     }

@@ -56,6 +56,8 @@ data class StatisticsDB(
     @PrimaryKey
     @ColumnInfo(name = "id_field")
     val playerId: String,
+    @ColumnInfo(name = "region_field")
+    val region: String,
     @ColumnInfo(name = "soloFpp_field")
     val soloFpp: StatData,
     @ColumnInfo(name = "duoFpp_field")

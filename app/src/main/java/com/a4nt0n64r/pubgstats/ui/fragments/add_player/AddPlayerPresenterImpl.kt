@@ -25,7 +25,6 @@ class AddPlayerPresenterImpl(
         isConnected: Boolean
     ) {
         if (isConnected) {
-            viewState.showLoading()
             if (name == "") {
                 viewState.showSnackbar(EMPTY_NAME)
             } else {
@@ -38,6 +37,7 @@ class AddPlayerPresenterImpl(
 
     @WorkerThread
     private fun getPlayerFromApi(name: String, region: String, platform: String) {
+        viewState.showLoading()
         CoroutineScope(Dispatchers.IO + job).launch {
             try {
                 viewState.requestInternetPermissionFromFragment()

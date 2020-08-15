@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.core.app.ActivityCompat
 import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
@@ -54,6 +55,7 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_main)
         registerReceiver(
             ConnectivityReceiver(),

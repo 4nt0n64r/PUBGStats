@@ -1,5 +1,6 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.add_player
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -15,9 +17,8 @@ import com.a4nt0n64r.pubgstats.ui.MainActivity
 import com.a4nt0n64r.pubgstats.ui.base.AbstractAddPlayerPresenter
 import com.a4nt0n64r.pubgstats.ui.base.AddPlayerFragmentView
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.add_player_frag_layout.*
 import kotlinx.android.synthetic.main.add_player_frag_layout.btn_find
-import kotlinx.android.synthetic.main.add_player_frag_layout.input_login
+import kotlinx.android.synthetic.main.add_player_frag_layout.name_input
 import kotlinx.android.synthetic.main.add_player_frag_layout.loading_screen_addplayer
 import kotlinx.android.synthetic.main.add_player_frag_layout.platform_spinner
 import kotlinx.android.synthetic.main.add_player_frag_layout.platform_tv
@@ -65,7 +66,8 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
         setUpSpinners()
 
         btn_find.setOnClickListener {
-            val playerName = input_login.text.toString().replace(" ", "")
+            name_input.hideKeyboard()
+            val playerName = name_input.text.toString().replace(" ", "")
             when (platform_spinner.selectedItem) {
                 "Steam" -> {
                     when (region_spinner.selectedItem) {
@@ -149,7 +151,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                             presenter.requestPlayer(
                                 playerName,
                                 "psn-eu",
-                                "steam",
+                                "psn",
                                 checkConnection()
                             )
                         }
@@ -157,7 +159,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                             presenter.requestPlayer(
                                 playerName,
                                 "psn-as",
-                                "steam",
+                                "psn",
                                 checkConnection()
                             )
                         }
@@ -165,7 +167,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                             presenter.requestPlayer(
                                 playerName,
                                 "psn-na",
-                                "steam",
+                                "psn",
                                 checkConnection()
                             )
                         }
@@ -173,7 +175,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                             presenter.requestPlayer(
                                 playerName,
                                 "psn-oc",
-                                "steam",
+                                "psn",
                                 checkConnection()
                             )
                         }
@@ -185,7 +187,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                             presenter.requestPlayer(
                                 playerName,
                                 "xbox-eu",
-                                "steam",
+                                "xbox",
                                 checkConnection()
                             )
                         }
@@ -193,7 +195,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                             presenter.requestPlayer(
                                 playerName,
                                 "xbox-as",
-                                "steam",
+                                "xbox",
                                 checkConnection()
                             )
                         }
@@ -201,7 +203,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                             presenter.requestPlayer(
                                 playerName,
                                 "xbox-na",
-                                "steam",
+                                "xbox",
                                 checkConnection()
                             )
                         }
@@ -209,7 +211,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                             presenter.requestPlayer(
                                 playerName,
                                 "xbox-sa",
-                                "steam",
+                                "xbox",
                                 checkConnection()
                             )
                         }
@@ -217,7 +219,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
                             presenter.requestPlayer(
                                 playerName,
                                 "xbox-oc",
-                                "steam",
+                                "xbox",
                                 checkConnection()
                             )
                         }
@@ -230,6 +232,11 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
     private fun setUpTextViews() {
         platform_tv.text = getString(R.string.platform)
         region_tv.text = getString(R.string.region)
+    }
+
+    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
     private fun setUpSpinners() {

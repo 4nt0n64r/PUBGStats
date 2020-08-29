@@ -1,6 +1,5 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.list_of_players
 
-import android.util.Log
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.model.PlayerUI
 import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
@@ -42,6 +41,7 @@ class ListOfPlayersPresenterImpl(
             withContext(Dispatchers.Main) {
                 if (listOfPlayersUI.isNullOrEmpty()) {
                     viewState.showErrorTextAndImage()
+                    viewState.changeFragment(ADD_PLAYER)
                 } else {
                     viewState.hideErrorTextAndImage()
                     viewState.showPlayers(listOfPlayersUI)
@@ -51,7 +51,7 @@ class ListOfPlayersPresenterImpl(
     }
 
     override fun onPlayerTouched(position: Int, isConnected: Boolean) {
-        if (isConnected){
+        if (isConnected) {
             CoroutineScope(Dispatchers.Main + job).launch {
                 withContext(Dispatchers.Main) {
                     val listOfPlayersInRV =
@@ -59,7 +59,7 @@ class ListOfPlayersPresenterImpl(
                     viewState.showPlayerStatistics(listOfPlayersInRV[position])
                 }
             }
-        }else{
+        } else {
             viewState.showSnackbar(NO_INTERNET)
         }
     }
@@ -101,6 +101,11 @@ class ListOfPlayersPresenterImpl(
             withContext(Dispatchers.Main) {
                 viewState.showPlayers(listOfPlayersUI)
                 viewState.hideMinusButton()
+            }
+            withContext(Dispatchers.Main) {
+                if (listOfPlayersUI.isNullOrEmpty()) {
+                    viewState.showErrorTextAndImage()
+                }
             }
         }
     }

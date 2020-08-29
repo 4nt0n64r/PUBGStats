@@ -11,7 +11,8 @@ import moxy.viewstate.strategy.StateStrategyType
 
 
 //функции вьюх. Всё что написано тут - то и может нарисовать вьюха, больше ничего.
-@StateStrategyType(AddToEndSingleStrategy::class)
+//@StateStrategyType(AddToEndSingleStrategy::class)
+@StateStrategyType(SingleStateStrategy::class)
 interface ActivityView : MvpView {
 
     @StateStrategyType(SkipStrategy::class)
@@ -48,6 +49,7 @@ interface ListOfPlayersFragmentView : MvpView {
     fun showErrorTextAndImage()
     fun hideErrorTextAndImage()
 
+    @StateStrategyType(SkipStrategy::class)
     fun showPlayers(players: List<PlayerUI>)
 
     @StateStrategyType(SkipStrategy::class)
@@ -72,12 +74,6 @@ interface StatisticsFragmentView : MvpView {
     fun showLoading()
     fun hideLoading()
 
-    //    fun showSeasons(seasons: List<SeasonDB>)
     fun showPlayerName(name: String)
     fun showRegimes(tpp: String, fpp: String)
-}
-
-@StateStrategyType(SingleStateStrategy::class)
-interface ErrorFragmentView : MvpView {
-
 }

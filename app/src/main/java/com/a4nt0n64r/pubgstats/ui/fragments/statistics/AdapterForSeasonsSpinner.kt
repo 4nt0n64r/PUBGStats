@@ -31,7 +31,7 @@ class AdapterForSeasonsSpinner(context: Context, seasons: List<SeasonDB>) :
             parent,
             false
         )
-        view.spinner_item_text.text = season.name
+        view.spinner_item_text.text = season?.name
         return view
     }
 }

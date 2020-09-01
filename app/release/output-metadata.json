@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "a4nt0n64r.PUBGSkills",
+  "applicationId": "com.a4nt0n64r.pubgskills",
   "variantName": "release",
   "elements": [
     {
@@ -12,7 +12,7 @@
       "filters": [],
       "properties": [],
       "versionCode": 1,
-      "versionName": "1.0",
+      "versionName": "1.1",
       "enabled": true,
       "outputFile": "app-release.apk"
     }

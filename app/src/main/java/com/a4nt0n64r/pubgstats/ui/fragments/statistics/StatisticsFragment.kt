@@ -13,7 +13,6 @@ import com.a4nt0n64r.pubgstats.ui.*
 import com.a4nt0n64r.pubgstats.ui.base.AbstractStatisticsPresenter
 import com.a4nt0n64r.pubgstats.ui.base.StatisticsFragmentView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.add_player_frag_layout.*
 import kotlinx.android.synthetic.main.statistics_frag_layout.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter

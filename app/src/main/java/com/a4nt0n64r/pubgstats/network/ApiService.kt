@@ -12,7 +12,7 @@ import retrofit2.http.Query
 interface ApiService {
 
     @Headers(
-        "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4MGEwZTNlMC0xZmQ3LTAxMzctMGNhNS0yMTY0MTZkZjQ2N2MiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTUxNjEzNDE1LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImZpbmFsX3Byb2plY3QifQ.Pd1DbJrDFoRhoHG4lj84kNUtt2GWZqklYIYvR9POCIg",
+        "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjNzhiY2ZiMC1jZWMyLTAxMzgtODNmZS0wYmM1ZWQ2ZGE2MzciLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTk4OTkzNDY2LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImNoZWVsNDA2OS1nbWFpIn0.HCGf9lFGeMpVTmGt8Yx7_P055PUHOHyPuAIU_WOqulo",
         "Accept: application/vnd.api+json"
     )
     @GET("steam/players/")
@@ -20,14 +20,14 @@ interface ApiService {
 
 
     @Headers(
-        "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4MGEwZTNlMC0xZmQ3LTAxMzctMGNhNS0yMTY0MTZkZjQ2N2MiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTUxNjEzNDE1LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImZpbmFsX3Byb2plY3QifQ.Pd1DbJrDFoRhoHG4lj84kNUtt2GWZqklYIYvR9POCIg",
+        "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjNzhiY2ZiMC1jZWMyLTAxMzgtODNmZS0wYmM1ZWQ2ZGE2MzciLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTk4OTkzNDY2LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImNoZWVsNDA2OS1nbWFpIn0.HCGf9lFGeMpVTmGt8Yx7_P055PUHOHyPuAIU_WOqulo",
         "Accept: application/vnd.api+json"
     )
     @GET("steam/seasons/")
     fun getSeasons(): Call<SeasonsDataFromApi>
 
     @Headers(
-        "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4MGEwZTNlMC0xZmQ3LTAxMzctMGNhNS0yMTY0MTZkZjQ2N2MiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTUxNjEzNDE1LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImZpbmFsX3Byb2plY3QifQ.Pd1DbJrDFoRhoHG4lj84kNUtt2GWZqklYIYvR9POCIg",
+        "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjNzhiY2ZiMC1jZWMyLTAxMzgtODNmZS0wYmM1ZWQ2ZGE2MzciLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTk4OTkzNDY2LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImNoZWVsNDA2OS1nbWFpIn0.HCGf9lFGeMpVTmGt8Yx7_P055PUHOHyPuAIU_WOqulo",
         "Accept: application/vnd.api+json"
     )
     @GET("steam/players/{playerId}/seasons/{seasonId}")

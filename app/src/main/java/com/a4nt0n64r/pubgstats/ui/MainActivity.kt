@@ -21,16 +21,12 @@ import org.koin.core.get
 
 
 const val ADD_PLAYER = 0
-const val STATISTICS = 1
-const val LIST_OF_PLAYERS = 2
-const val ERROR = 3
 
 const val FRAGMENT_CHANGED = "fragment_changed"
 
 const val ADD_PLAYER_BACKSTACK = "add"
 const val STATISTICS_BACKSTACK = "stat"
-const val LIST_OF_PLAYERS_BACKSTACK = "list"
-const val ERROR_BACKSTACK = "err"
+
 
 const val NAME = "name"
 const val ID = "id"
@@ -65,12 +61,6 @@ class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent,
         presenter.loadListOfPlayersFragment()
 
     }
-
-    // TODO("добавить колбэк что фрагментов не осталось и вырубить приложение")
-    // TODO("когда поворачиваем экран он откатывает фрагмент статки на меню")
-    //это происходит из-за того что активность пересоздается в момент поворта и выполняется onCreate()
-    //возможно надо чекать какой фрагмент показывается и сохранять в бандл всё для восстановления
-    // https://stackoverflow.com/questions/9294603/how-do-i-get-the-currently-displayed-fragment
 
     override fun drawAddPlayerFragment() {
         displayAddPlayerFragment()

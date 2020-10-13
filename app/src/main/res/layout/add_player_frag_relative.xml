@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/sv"
         android:fillViewport="true"
         android:gravity="center">
 
@@ -26,18 +26,19 @@
                     android:layout_height="wrap_content"
                     android:text="@string/begin_txt_title"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:layout_marginTop="30dp"/>
 
-<!--            <ImageView-->
-<!--                    android:id="@+id/start_image"-->
-<!--                    android:layout_width="200dp"-->
-<!--                    android:layout_height="250dp"-->
-<!--                    android:layout_gravity="center_horizontal"-->
-<!--                    android:layout_marginStart="16dp"-->
-<!--                    android:layout_marginTop="8dp"-->
-<!--                    android:layout_marginEnd="16dp"-->
-<!--                    android:contentDescription="@string/begin_txt_title"-->
-<!--                    android:src="@drawable/icon" />-->
+            <ImageView
+                    android:id="@+id/start_image"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="@string/begin_txt_title"
+                    android:src="@drawable/icon" />
 
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layout_login"
@@ -75,9 +76,9 @@
                     android:id="@+id/platform_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="8dp"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:weightSum="5">
@@ -94,10 +95,11 @@
                 <Spinner
                         android:id="@+id/platform_spinner"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_weight="3"
                         android:backgroundTint="@color/color_yellow_background"
                         android:entries="@array/platform"
+                        android:minHeight="48dp"
                         android:spinnerMode="dialog"
                         android:textAlignment="textStart"
                         android:textColor="@color/color_yellow_background"
@@ -108,9 +110,9 @@
                     android:id="@+id/region_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="8dp"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:weightSum="5">
@@ -134,6 +136,7 @@
                         android:entries="@array/region_pc"
                         android:foregroundGravity="center"
                         android:gravity="center"
+                        android:minHeight="48dp"
                         android:spinnerMode="dialog"
                         android:textColor="@color/color_yellow_background"
                         android:textSize="18sp" />
@@ -143,7 +146,6 @@
 
             <Button
                     android:id="@+id/btn_find"
-                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -161,8 +163,7 @@
                 android:id="@+id/loading_screen_addplayer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:alpha="0.5"
-                android:background="@color/color_gray_background"
+                android:background="@color/color_gray_background_opacity"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="invisible">

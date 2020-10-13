@@ -5,5 +5,6 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="color_gray_background">#424242</color>
+    <color name="color_gray_background_opacity">#80424242</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#FFAB00</color>
 </resources>

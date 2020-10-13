@@ -142,7 +142,6 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
         spAdapter.updateView()
     }
 
-    //переделать слушателя на спиннере
     override fun initiateStatisticsLoading() {
         presenter.setStatistics()
         setSpinnerOnItemSelectedListener()

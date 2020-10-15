@@ -1,5 +1,5 @@
 # Player Skills
-# Application for viewing statistics in PUBG
+## Application for viewing statistics in PUBG
 
 ## Step-by-step
 1. Enter the name of the player region and gaming platform.

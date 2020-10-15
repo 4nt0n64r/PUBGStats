@@ -7,9 +7,9 @@ Application for viewing statistics in PUBG
 
 ## Screenshots:
 <p>
-<img src="https://github.com/4nt0n64r/PUBGStats/blob/master/app/src/main/res/screenshots/1_2.jpg" width="200" height="350" />
-<img src="https://github.com/4nt0n64r/PUBGStats/blob/master/app/src/main/res/screenshots/2.jpg" width="200" height="350" />
-<img src="https://github.com/4nt0n64r/PUBGStats/blob/master/app/src/main/res/screenshots/3.jpg" width="200" height="350" />
+<img src="https://github.com/4nt0n64r/PUBGStats/blob/master/app/src/main/res/screenshots/1_2.jpg" width="200" height="380" />
+<img src="https://github.com/4nt0n64r/PUBGStats/blob/master/app/src/main/res/screenshots/2.jpg" width="200" height="380" />
+<img src="https://github.com/4nt0n64r/PUBGStats/blob/master/app/src/main/res/screenshots/3.jpg" width="200" height="380" />
 </p>
 
 

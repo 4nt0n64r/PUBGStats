@@ -1,6 +1,11 @@
 # Player Skills
 Application for viewing statistics in PUBG
 
+## For testers
+1. Names: QuantumUP, CHEEL40000
+2. Region: Russia
+3. Platform: Steam
+
 ## Step-by-step
 1. Enter the name of the player region and gaming platform.
 2. Get a complete overview of his gaming activities.

@@ -1,12 +1,18 @@
-package com.a4nt0n64r.pubgstats.ui.fragments.list_of_players
+package com.a4nt0n64r.pubgstats.ui.fragments.listOfPlayers
 
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.model.PlayerUI
 import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
 import com.a4nt0n64r.pubgstats.ui.ADD_PLAYER
 import com.a4nt0n64r.pubgstats.ui.base.AbstractListOfPlayersPresenter
-import com.a4nt0n64r.pubgstats.ui.fragments.add_player.NO_INTERNET
-import kotlinx.coroutines.*
+import com.a4nt0n64r.pubgstats.ui.fragments.addPlayer.NO_INTERNET
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 import moxy.InjectViewState
 
 

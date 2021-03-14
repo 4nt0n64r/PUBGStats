@@ -1,4 +1,4 @@
-package com.a4nt0n64r.pubgstats.ui.fragments.add_player
+package com.a4nt0n64r.pubgstats.ui.fragments.addPlayer
 
 import android.content.Context
 import android.os.Bundle
@@ -248,28 +248,28 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
 
     private fun setUpPCRegions(activity: MainActivity) {
         val regions = resources.getStringArray(R.array.region_pc)
-        val regionPCAdapter = AdapterForSpinner(activity, regions)
+        val regionPCAdapter = AdapterForSpinners(activity, regions)
         region_spinner.adapter = regionPCAdapter
         regionPCAdapter.notifyDataSetChanged()
     }
 
     private fun setUpPSNRegions(activity: MainActivity) {
         val regions = resources.getStringArray(R.array.region_psn)
-        val regionPSNAdapter = AdapterForSpinner(activity, regions)
+        val regionPSNAdapter = AdapterForSpinners(activity, regions)
         region_spinner.adapter = regionPSNAdapter
         regionPSNAdapter.notifyDataSetChanged()
     }
 
     private fun setUpXboxRegions(activity: MainActivity) {
         val regions = resources.getStringArray(R.array.region_xbox)
-        val regionXboxAdapter = AdapterForSpinner(activity, regions)
+        val regionXboxAdapter = AdapterForSpinners(activity, regions)
         region_spinner.adapter = regionXboxAdapter
         regionXboxAdapter.notifyDataSetChanged()
     }
 
     private fun setUpPlatforms(activity: MainActivity) {
         val platforms = resources.getStringArray(R.array.platform)
-        val platformAdapter = AdapterForSpinner(activity, platforms)
+        val platformAdapter = AdapterForSpinners(activity, platforms)
         platform_spinner.adapter = platformAdapter
     }
 
@@ -283,9 +283,9 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
         activity.drawListOfPlayersFragment()
     }
 
-    override fun showSnackbar(msg_id: Int) {
+    override fun showSnackbar(messageId: Int) {
         var message = ""
-        when (msg_id) {
+        when (messageId) {
             NOT_FOUND -> {
                 message = getString(R.string.err_player_not_found)
             }
@@ -307,6 +307,7 @@ class AddPlayerFragment : MvpAppCompatFragment(), AddPlayerFragmentView, KoinCom
     private fun setSpinnerOnPlatformSelectedListener() {
         platform_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
+                //Not implemented
             }
 
             override fun onItemSelected(

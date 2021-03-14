@@ -10,9 +10,12 @@ import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
 import com.a4nt0n64r.pubgstats.network.ApiService
 import com.a4nt0n64r.pubgstats.network.NetworkRepository
 import com.a4nt0n64r.pubgstats.ui.ActivityPresenterImpl
-import com.a4nt0n64r.pubgstats.ui.base.*
-import com.a4nt0n64r.pubgstats.ui.fragments.add_player.AddPlayerPresenterImpl
-import com.a4nt0n64r.pubgstats.ui.fragments.list_of_players.ListOfPlayersPresenterImpl
+import com.a4nt0n64r.pubgstats.ui.base.AbstractActivityPresenter
+import com.a4nt0n64r.pubgstats.ui.base.AbstractAddPlayerPresenter
+import com.a4nt0n64r.pubgstats.ui.base.AbstractListOfPlayersPresenter
+import com.a4nt0n64r.pubgstats.ui.base.AbstractStatisticsPresenter
+import com.a4nt0n64r.pubgstats.ui.fragments.addPlayer.AddPlayerPresenterImpl
+import com.a4nt0n64r.pubgstats.ui.fragments.listOfPlayers.ListOfPlayersPresenterImpl
 import com.a4nt0n64r.pubgstats.ui.fragments.statistics.StatisticsPresenterImpl
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

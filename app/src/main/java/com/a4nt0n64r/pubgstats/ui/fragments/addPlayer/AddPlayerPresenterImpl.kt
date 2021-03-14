@@ -1,11 +1,15 @@
-package com.a4nt0n64r.pubgstats.ui.fragments.add_player
+package com.a4nt0n64r.pubgstats.ui.fragments.addPlayer
 
 import androidx.annotation.WorkerThread
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
 import com.a4nt0n64r.pubgstats.network.NetworkRepository
 import com.a4nt0n64r.pubgstats.ui.base.AbstractAddPlayerPresenter
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.Dispatchers
 import moxy.InjectViewState
 import retrofit2.HttpException
 
@@ -35,6 +39,7 @@ class AddPlayerPresenterImpl(
         }
     }
 
+    @Suppress("TooGenericExceptionCaught") // Непонятно пока как отлавливать
     @WorkerThread
     private fun getPlayerFromApi(name: String, region: String, platform: String) {
         viewState.showLoading()

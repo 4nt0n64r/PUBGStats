@@ -28,7 +28,7 @@ interface ActivityView : MvpView {
 @StateStrategyType(SkipStrategy::class)
 interface AddPlayerFragmentView : MvpView {
 
-    fun showSnackbar(msg_id: Int)
+    fun showSnackbar(messageId: Int)
 
     fun showLoading()
     fun hideLoading()
@@ -64,7 +64,7 @@ interface ListOfPlayersFragmentView : MvpView {
     fun showPlayerStatistics(player: PlayerDB)
 
     @StateStrategyType(SkipStrategy::class)
-    fun showSnackbar(msg_id: Int)
+    fun showSnackbar(messageId: Int)
 
     @StateStrategyType(SkipStrategy::class)
     fun selectionModeOff()

@@ -1,4 +1,4 @@
-package com.a4nt0n64r.pubgstats.ui.fragments.list_of_players
+package com.a4nt0n64r.pubgstats.ui.fragments.listOfPlayers
 
 import android.graphics.Color
 import android.graphics.PorterDuff

@@ -22,12 +22,33 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
+
+plugins{
+    id("io.gitlab.arturbosch.detekt").version("1.16.0")
+}
+
+detekt {
+    toolVersion = "1.10.0"
+    config = files("config/detekt/detekt.yml")
+    buildUponDefaultConfig = true
+    failFast = true
+
+    input = files("app/src/main/java", "app/src/main/kotlin")
+
+    reports {
+        html {
+            enabled = true
+            destination = file("app/build/detekt/detekt.html")
+        }
+    }
+}
+tasks.detekt.jvmTarget = "1.8"
 
 allprojects {
     repositories {

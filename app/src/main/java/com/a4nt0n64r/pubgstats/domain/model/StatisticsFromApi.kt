@@ -22,15 +22,15 @@ data class Gamemode(
     @SerializedName("duo")
     val duo: StatData,
     @SerializedName("duo-fpp")
-    val duo_fpp: StatData,
+    val duoFpp: StatData,
     @SerializedName("solo")
     val solo: StatData,
     @SerializedName("solo-fpp")
-    val solo_fpp: StatData,
+    val soloFpp: StatData,
     @SerializedName("squad")
     val squad: StatData,
     @SerializedName("squad-fpp")
-    val squad_fpp: StatData
+    val squadFpp: StatData
 )
 
 data class StatData(

@@ -1,4 +1,4 @@
-package com.a4nt0n64r.pubgstats.ui.fragments.list_of_players
+package com.a4nt0n64r.pubgstats.ui.fragments.listOfPlayers
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,7 +16,7 @@ import com.a4nt0n64r.pubgstats.ui.ADD_PLAYER
 import com.a4nt0n64r.pubgstats.ui.MainActivity
 import com.a4nt0n64r.pubgstats.ui.base.AbstractListOfPlayersPresenter
 import com.a4nt0n64r.pubgstats.ui.base.ListOfPlayersFragmentView
-import com.a4nt0n64r.pubgstats.ui.fragments.add_player.NO_INTERNET
+import com.a4nt0n64r.pubgstats.ui.fragments.addPlayer.NO_INTERNET
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.list_of_players_frag_layout.*
 import moxy.MvpAppCompatFragment
@@ -134,9 +134,9 @@ class ListOfPlayersFragment : MvpAppCompatFragment(), ListOfPlayersFragmentView,
         return activity.connectionAvailabile
     }
 
-    override fun showSnackbar(msg_id: Int) {
+    override fun showSnackbar(messageId: Int) {
         var message = ""
-        when (msg_id) {
+        when (messageId) {
             NO_INTERNET -> {
                 message = getString(R.string.no_internet_connection)
             }

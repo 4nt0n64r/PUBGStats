@@ -7,6 +7,8 @@ import com.a4nt0n64r.pubgstats.domain.model.StatisticsDB
 import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
 import java.time.LocalDate
 
+@Suppress("TooManyFunctions") //Просто много функций нужных (Возможно стоит разделить
+// репозитории для статистики и игроков)
 class LocalRepositoryImpl(private val dao: Dao) : LocalRepository {
 
     override suspend fun addPlayerToDB(player: PlayerDB) {
@@ -45,7 +47,7 @@ class LocalRepositoryImpl(private val dao: Dao) : LocalRepository {
         return dao.getPlayerStatisticsFromDB(player.id)
     }
 
-    override suspend fun getLastDownloadStatisticsDate(playerId:String): LocalDate {
+    override suspend fun getLastDownloadStatisticsDate(playerId:String): LocalDate? {
         return dao.getLastDownloadDateForStatistics(playerId)
     }
 

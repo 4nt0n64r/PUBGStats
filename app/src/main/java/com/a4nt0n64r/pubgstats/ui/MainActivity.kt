@@ -10,8 +10,8 @@ import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.ui.base.AbstractActivityPresenter
 import com.a4nt0n64r.pubgstats.ui.base.ActivityView
-import com.a4nt0n64r.pubgstats.ui.fragments.add_player.AddPlayerFragment
-import com.a4nt0n64r.pubgstats.ui.fragments.list_of_players.ListOfPlayersFragment
+import com.a4nt0n64r.pubgstats.ui.fragments.addPlayer.AddPlayerFragment
+import com.a4nt0n64r.pubgstats.ui.fragments.listOfPlayers.ListOfPlayersFragment
 import com.a4nt0n64r.pubgstats.ui.fragments.statistics.StatisticsFragment
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
@@ -38,8 +38,6 @@ const val REQUEST_PERMISSION_CODE = 0
 
 class MainActivity : MvpAppCompatActivity(), ActivityView, KoinComponent,
     ConnectivityReceiver.ConnectivityReceiverListener {
-
-    private val TAG = "MainActivity"
 
     var connectionAvailabile: Boolean = true
 

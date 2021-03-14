@@ -1,6 +1,7 @@
 package com.a4nt0n64r.pubgstats.ui.fragments.statistics
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
 import com.a4nt0n64r.pubgstats.domain.model.StatisticsItem
-import com.a4nt0n64r.pubgstats.ui.*
+import com.a4nt0n64r.pubgstats.ui.NAME
+import com.a4nt0n64r.pubgstats.ui.ID
+import com.a4nt0n64r.pubgstats.ui.REGION
+import com.a4nt0n64r.pubgstats.ui.PLATFORM
 import com.a4nt0n64r.pubgstats.ui.base.AbstractStatisticsPresenter
 import com.a4nt0n64r.pubgstats.ui.base.StatisticsFragmentView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -149,8 +153,6 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
 
     private fun setSpinnerOnItemSelectedListener() {
         regime_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
 
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -166,6 +168,10 @@ class StatisticsFragment : MvpAppCompatFragment(), StatisticsFragmentView, KoinC
                         navigation.setSelectedItemId(R.id.navigation_solo)
                     }
                 }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                Log.d("Dummy","Nothing selected")
             }
         }
     }

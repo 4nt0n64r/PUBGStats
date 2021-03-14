@@ -1,7 +1,10 @@
 package com.a4nt0n64r.pubgstats.network
 
-import com.a4nt0n64r.pubgstats.domain.model.*
-import retrofit2.HttpException
+import com.a4nt0n64r.pubgstats.domain.model.PlayerDataFromApi
+import com.a4nt0n64r.pubgstats.domain.model.SeasonsDataFromApi
+import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
+import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
+import com.a4nt0n64r.pubgstats.domain.model.StatisticsFromApi
 
 
 interface NetworkRepository {

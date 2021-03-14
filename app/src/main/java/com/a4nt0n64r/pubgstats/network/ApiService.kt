@@ -9,6 +9,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+@Suppress("MaxLineLength") //Ключ апи
 interface ApiService {
 
     @Headers(
@@ -34,13 +35,3 @@ interface ApiService {
     fun getSeasonStats(@Path("playerId") playerId: String,@Path("seasonId") seasonId: String): Call<StatisticsFromApi>
 
 }
-//    "https://api.pubg.com/shards/$platform/players/$playerId/seasons/{seasonId}"
-
-//base : "https://api.pubg.com/shards/"
-//get player by name "https://api.pubg.com/shards/steam/players?filter[playerNames]=CHEEL40000"
-//get season stats by players ID "https://api.pubg.com/shards/steam/players/account.c0e530e9b7244b358def282782f893af/seasons/division.bro.official.pc-2018-06"
-
-
-// https://api.pubg.com/shards/steam/players/account.c0e530e9b7244b358def282782f893af/seasons/division.bro.official.pc-2018-06
-// https://api.pubg.com/steam/players/account.05d02987df274d23b404bb3373f7825c/seasons/division.bro.official.pc-2018-06
-

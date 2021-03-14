@@ -1,4 +1,4 @@
-package com.a4nt0n64r.pubgstats.ui.fragments.list_of_players
+package com.a4nt0n64r.pubgstats.ui.fragments.listOfPlayers
 
 import android.content.Context
 import android.view.GestureDetector
@@ -47,7 +47,11 @@ class RecyclerItemClickListener(
         return false
     }
 
-    override fun onTouchEvent(view: RecyclerView, motionEvent: MotionEvent) {}
+    override fun onTouchEvent(view: RecyclerView, motionEvent: MotionEvent) {
+        //Not implemented
+    }
 
-    override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+    override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+        //Not implemented
+    }
 }

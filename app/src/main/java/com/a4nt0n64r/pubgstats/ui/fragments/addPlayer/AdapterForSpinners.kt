@@ -1,4 +1,4 @@
-package com.a4nt0n64r.pubgstats.ui.fragments.add_player
+package com.a4nt0n64r.pubgstats.ui.fragments.addPlayer
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import com.a4nt0n64r.pubgstats.R
 import kotlinx.android.synthetic.main.spinner_item.view.*
 
 
-class AdapterForSpinner(context: Context, items: Array<String>) :
+class AdapterForSpinners(context: Context, items: Array<String>) :
     ArrayAdapter<String>(context, 0, items) {
 
     override fun getView(position: Int, recycledView: View?, parent: ViewGroup): View {

@@ -4,11 +4,22 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import com.a4nt0n64r.pubgstats.R
 import com.a4nt0n64r.pubgstats.core.PUBGStatsApplication
-import com.a4nt0n64r.pubgstats.domain.model.*
+import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
+import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
+import com.a4nt0n64r.pubgstats.domain.model.StatisticsDB
+import com.a4nt0n64r.pubgstats.domain.model.StatisticsItem
+import com.a4nt0n64r.pubgstats.domain.model.StatData
+import com.a4nt0n64r.pubgstats.domain.model.StatisticsHeader
+import com.a4nt0n64r.pubgstats.domain.model.StatisticsPoints
 import com.a4nt0n64r.pubgstats.domain.repository.LocalRepository
 import com.a4nt0n64r.pubgstats.network.NetworkRepository
 import com.a4nt0n64r.pubgstats.ui.base.AbstractStatisticsPresenter
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import moxy.InjectViewState
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -70,6 +81,7 @@ class StatisticsPresenterImpl(
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     @WorkerThread
     private suspend fun getNewSeasons(): List<SeasonDB> {
         try {
@@ -104,9 +116,10 @@ class StatisticsPresenterImpl(
         if (lastDownloadDate != null) {
             Log.d(
                 "INFO",
-                "For seasons updating left ${30 - ChronoUnit.DAYS.between(lastDownloadDate, todayDate)} days"
+                "For seasons updating left ${DAYS_BEFORE_UPDATE - 
+                        ChronoUnit.DAYS.between(lastDownloadDate, todayDate)} days"
             )
-            return ChronoUnit.DAYS.between(lastDownloadDate, todayDate) >= 30
+            return ChronoUnit.DAYS.between(lastDownloadDate, todayDate) >= DAYS_BEFORE_UPDATE
         } else return true
     }
 
@@ -144,9 +157,9 @@ class StatisticsPresenterImpl(
 
         val statisticsDB = StatisticsDB(
             player.id, player.region,
-            statisticsFromApi.data.seasonAttributes.gameModeStats.solo_fpp,
-            statisticsFromApi.data.seasonAttributes.gameModeStats.duo_fpp,
-            statisticsFromApi.data.seasonAttributes.gameModeStats.squad_fpp,
+            statisticsFromApi.data.seasonAttributes.gameModeStats.soloFpp,
+            statisticsFromApi.data.seasonAttributes.gameModeStats.duoFpp,
+            statisticsFromApi.data.seasonAttributes.gameModeStats.squadFpp,
             statisticsFromApi.data.seasonAttributes.gameModeStats.solo,
             statisticsFromApi.data.seasonAttributes.gameModeStats.duo,
             statisticsFromApi.data.seasonAttributes.gameModeStats.squad,
@@ -156,18 +169,19 @@ class StatisticsPresenterImpl(
     }
 
     override suspend fun shouldDownloadStatistics(): Boolean {
-        val lastDownload = localRepository.getLastDownloadStatisticsDate(player.id)
+        val lastDownload: LocalDate? = localRepository.getLastDownloadStatisticsDate(player.id)
         val statRegion = localRepository.getRegionForPlayerStatistics(player.id)
         if (statRegion == player.region){
-            if (lastDownload != null){
+            return if (lastDownload != null){
                 val todayDate = LocalDate.now()
                 Log.d(
                     "INFO",
-                    "For statistics for ${player.name} updating left ${ChronoUnit.DAYS.between(lastDownload, todayDate)}"
+                    "For statistics for ${player.name} updating left " +
+                            "${ChronoUnit.DAYS.between(lastDownload, todayDate)}"
                 )
-                return ChronoUnit.DAYS.between(lastDownload, todayDate) >= 1
+                ChronoUnit.DAYS.between(lastDownload, todayDate) >= 1
             }else{
-                return true
+                true
             }
         }
         else{
@@ -327,3 +341,5 @@ class StatisticsPresenterImpl(
         return statistics
     }
 }
+
+const val DAYS_BEFORE_UPDATE = 30

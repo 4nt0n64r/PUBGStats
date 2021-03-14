@@ -10,6 +10,8 @@ import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
 import com.a4nt0n64r.pubgstats.domain.model.StatisticsDB
 import java.time.LocalDate
 
+@Suppress("TooManyFunctions") //Просто много функций нужных (Возможно стоит разделить
+// репозитории для статистики и игроков)
 @Dao
 interface Dao {
 
@@ -49,7 +51,7 @@ interface Dao {
     fun getPlayerStatisticsFromDB(playerId: String): StatisticsDB
 
     @Query("SELECT lastDownloadStatisticsDate_field FROM statistics_table WHERE id_field =:playerId")
-    fun getLastDownloadDateForStatistics(playerId: String): LocalDate
+    fun getLastDownloadDateForStatistics(playerId: String): LocalDate?
 
     @Query("SELECT region_field FROM statistics_table WHERE id_field =:playerId")
     fun getRegionForPlayerFromStatistics(playerId: String):String

@@ -19,7 +19,7 @@ interface LocalRepository {
 
     suspend fun addStatisticsForPlayer(statisticsDB: StatisticsDB)
     suspend fun getStatisticsForPlayer(player: PlayerDB): StatisticsDB
-    suspend fun getLastDownloadStatisticsDate(playerId:String): LocalDate
+    suspend fun getLastDownloadStatisticsDate(playerId:String): LocalDate?
     suspend fun getRegionForPlayerStatistics(playerId:String):String
     suspend fun deleteStatisticsForPlayer(player: PlayerDB)
 }

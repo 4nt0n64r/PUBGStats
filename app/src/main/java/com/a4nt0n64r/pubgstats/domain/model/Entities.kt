@@ -1,6 +1,11 @@
 package com.a4nt0n64r.pubgstats.domain.model
 
-import androidx.room.*
+import android.annotation.SuppressLint
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import androidx.room.TypeConverter
 import java.sql.Date
 import java.time.LocalDate
 
@@ -74,6 +79,8 @@ data class StatisticsDB(
     val lastDownloadStatisticsDate: LocalDate
 )
 
+@Suppress("LongMethod") //Пока статистика передается как строка,
+// наверное есть способ лучше
 class StatisticsConverters {
     @TypeConverter
     fun fromStatData(statData: StatData?): String? {
@@ -151,6 +158,8 @@ class StatisticsConverters {
     }
 
     @TypeConverter
+    @Suppress("MagicNumber", "LongMethod") //Пока статистика передается как строка,
+    // наверное есть способ лучше
     fun stringToStatData(str: String?): StatData? {
         val statList = str?.toList()
         if (statList != null) {

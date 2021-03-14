@@ -5,8 +5,7 @@ import moxy.InjectViewState
 
 
 @InjectViewState
-class ActivityPresenterImpl(
-) : AbstractActivityPresenter() {
+class ActivityPresenterImpl : AbstractActivityPresenter() {
 
     override fun loadAddPlayerFragment() {
         viewState.drawAddPlayerFragment()

@@ -6,7 +6,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.a4nt0n64r.pubgstats.domain.model.*
+import com.a4nt0n64r.pubgstats.domain.model.DateConverters
+import com.a4nt0n64r.pubgstats.domain.model.PlayerDB
+import com.a4nt0n64r.pubgstats.domain.model.SeasonDB
+import com.a4nt0n64r.pubgstats.domain.model.StatisticsDB
+import com.a4nt0n64r.pubgstats.domain.model.StatisticsConverters
 
 @Database(
     entities = [PlayerDB::class, SeasonDB::class, StatisticsDB::class],
